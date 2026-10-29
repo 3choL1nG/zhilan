@@ -362,3 +362,40 @@ html{scroll-padding-top:100px}body{font-size:16px;line-height:1.65}h1{font-size:
 html{scroll-padding-bottom:110px}.top-account{width:44px;height:44px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;background:var(--paper);color:var(--sub)}.top-account svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8}@media(max-width:760px){.top-actions .prototype{display:none}}
 .question h2{text-wrap:balance;max-inline-size:42em}.option.is-wrong:has(input:checked){background:var(--bad-soft);border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
 
+
+/* 练习进度与随手可达的提交 / 下一题操作。 */
+.practice-secondary{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px}
+.practice-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0 0;margin-top:20px;border-top:1px solid var(--line);background:var(--paper)}
+.practice-status{display:flex;flex-direction:column;gap:2px;font-size:13px;min-width:0}
+.practice-status span{font-size:12px;color:var(--sub)}
+.practice-buttons{display:flex;gap:10px;flex-shrink:0}
+#practice-question{scroll-margin-top:92px}
+#practice-result:empty{display:none}
+@media(max-width:760px){
+ body.theory-practice .mobile-nav{display:none}
+ body.theory-practice .content{padding-bottom:160px}
+ .practice-actions{position:fixed;z-index:46;left:0;right:0;bottom:0;min-height:110px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));margin:0;border-top:1px solid var(--line);box-shadow:0 -4px 20px #1825380c;flex-wrap:wrap;gap:8px}
+ .practice-status{width:100%;flex-direction:row;justify-content:space-between;gap:8px;font-size:13px}
+ .practice-status strong{overflow-wrap:anywhere}
+ .practice-status span{white-space:nowrap;font-size:11px;align-self:center}
+ .practice-buttons{width:100%;gap:12px}
+ .practice-buttons .btn{min-height:46px}
+ #practice-primary{flex:1}
+ .practice-filters{gap:10px;align-items:end}
+ .practice-filters .search{min-width:0;flex:1}
+ .practice-filters .control{max-width:100%;min-width:0}
+ #practice-question{scroll-margin-top:76px}
+ .practice-question .option{padding:12px;gap:9px;font-size:15px}
+ .practice-question .option-state{white-space:normal;font-size:11px}
+ .theory-practice .page-head h1{font-size:24px}
+ .theory-practice .page-head{gap:10px}
+ .theory-practice .page-head p{font-size:12px}
+ .theory-practice .u070{bottom:140px}
+}
+.practice-filters .control{width:100%;min-width:0}
+@media(max-width:760px){
+ .toolbar.practice-filters{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
+ .practice-filters>label:first-child{grid-column:1/-1}
+ .practice-filters>label{min-width:0}
+ .practice-filters>.btn{margin:0}
+}

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,user_id INTEGER NOT NULL
 CREATE TABLE IF NOT EXISTS progress(user_id INTEGER NOT NULL REFERENCES users(id),question_id TEXT NOT NULL,wrong INTEGER DEFAULT 0,favorite INTEGER DEFAULT 0,seen INTEGER DEFAULT 0,correct INTEGER DEFAULT 0,last_answer TEXT,updated INTEGER,PRIMARY KEY(user_id,question_id));
 CREATE TABLE IF NOT EXISTS feedback(id INTEGER PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),question_id TEXT,text TEXT NOT NULL,created INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS workspaces(id TEXT PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),attempt_id TEXT REFERENCES attempts(id),question_id TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'open',created INTEGER NOT NULL,touched INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS theory_sessions(user_id INTEGER NOT NULL REFERENCES users(id),context TEXT NOT NULL,id TEXT NOT NULL,state TEXT NOT NULL,updated INTEGER NOT NULL,PRIMARY KEY(user_id,context));
 CREATE INDEX IF NOT EXISTS attempt_owner ON attempts(user_id,status);`);
 export const now=()=>Date.now();
 export function hashPassword(password){const salt=randomBytes(16).toString('hex');return salt+':'+scryptSync(password,salt,64).toString('hex')}

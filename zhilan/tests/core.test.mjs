@@ -17,3 +17,86 @@ test('all historical answer-returning routes are blocked during an active exam',
 test('extension wrong answers support review, retry, favorites and admin classification',async()=>{const {extensions}=await import('../src/bank.mjs');const q=extensions[0],u=await account('extension_learner'),admin=await account('extension_admin','admin');assert.equal((await u.call('/api/theory/submit','POST',{id:q.id,answer:'invalid'})).data.correct,false);const wrong=(await u.call('/api/questions?type='+q.type+'&filter=wrong')).data.questions.find(x=>x.id===q.id);assert.equal(wrong.origin,'extension');assert.equal(wrong.question,q.question);assert.equal(wrong.answer,undefined);assert.equal((await u.call('/api/progress','PATCH',{id:q.id,favorite:true})).status,200);const list=(await admin.call('/api/admin/users/'+u.id+'/progress')).data.questions;assert.equal(list[0].kind,'理论');assert.equal(list[0].title,q.question);assert.equal(list[0].type,q.type_label);assert.equal((await u.call('/api/theory/submit','POST',{id:q.id,answer:q.answer})).data.correct,true);const stats=(await u.call('/api/meta')).data.stats;assert.equal(stats.answered,0);assert.equal(stats.extensionAnswered,1)});
 test('runtime task list protects privacy and users can release their own running or queued task',async()=>{const http=await import('node:http'),{randomUUID}=await import('node:crypto'),socket=path.join(process.env.DATA_DIR,'runtime-test.sock'),oldSocket=process.env.RUNTIME_SOCKET;const states=new Map();let failClose=false,closeGate=null,notifyClose=null;const control=http.createServer(async(req,res)=>{let text='';for await(const c of req)text+=c;const d=JSON.parse(text);res.setHeader('Content-Type','application/json');if(d.op==='start'){states.set(d.id,{status:'ready',position:0});return res.end(JSON.stringify(states.get(d.id)))}if(d.op==='close'){if(closeGate){notifyClose?.();await closeGate}if(failClose){res.writeHead(400);return res.end(JSON.stringify({error:'temporary deletion failure'}))}states.delete(d.id);return res.end(JSON.stringify({status:'closed'}))}res.end(JSON.stringify(states.get(d.id)||{status:'missing'}))});await new Promise(r=>control.listen(socket,r));process.env.RUNTIME_SOCKET=socket;try{const a=await account('queue_a'),b=await account('queue_b'),admin=await account('queue_admin','admin');async function workspace(u,qid,status){const a=(await u.call('/api/practice','POST',{id:qid})).data,id=randomUUID();db.prepare('INSERT INTO workspaces(id,user_id,attempt_id,question_id,created,touched) VALUES(?,?,?,?,?,?)').run(id,u.id,a.id,qid,Date.now(),Date.now());states.set(id,{status,position:status==='queued'?1:0});return {id,attempt:a.id}}const own=await workspace(a,'1.1.1','queued'),other=await workspace(b,'2.1.1','ready');await a.call('/api/attempts/'+own.attempt,'PATCH',{answers:{'1.1.1':{text:'保存中的答案'}}});const visible=(await a.call('/api/workspaces')).data.workspaces;assert.equal(visible.find(w=>w.own).id,own.id);const anonymous=visible.find(w=>!w.own);assert.equal(anonymous.id,null);assert.equal(anonymous.questionId,null);assert.equal(anonymous.attemptId,null);assert.equal(anonymous.username,'其他用户');assert.equal(anonymous.canStop,false);const adminList=(await admin.call('/api/workspaces')).data.workspaces;assert.equal(adminList.find(w=>w.id===other.id).username,'queue_b');assert.equal((await a.call('/api/workspaces/'+other.id+'/stop','POST',{})).status,403);assert.equal((await a.call('/api/workspaces/'+own.id+'/stop','POST',{})).status,200);assert.equal(db.prepare('SELECT status FROM workspaces WHERE id=?').get(own.id).status,'closed');assert.equal((await a.call('/api/attempts/'+own.attempt)).data.answers['1.1.1'].text,'保存中的答案');failClose=true;assert.equal((await admin.call('/api/workspaces/'+other.id+'/stop','POST',{})).status,503);assert.equal(db.prepare('SELECT status FROM workspaces WHERE id=?').get(other.id).status,'cleanup_pending');failClose=false;assert.equal((await admin.call('/api/workspaces/'+other.id+'/stop','POST',{})).status,200);const race=await workspace(a,'2.1.5','ready');let releaseClose;closeGate=new Promise(r=>releaseClose=r);const entered=new Promise(r=>notifyClose=r);const restarting=a.call('/api/workspaces/'+race.id+'/restart','POST',{questionId:'2.1.5'});await entered;const stopping=a.call('/api/workspaces/'+race.id+'/stop','POST',{});await new Promise(r=>setTimeout(r,30));closeGate=null;releaseClose();assert.equal((await restarting).status,200);assert.equal((await stopping).status,200);assert.equal(states.has(race.id),false);assert.equal(db.prepare('SELECT status FROM workspaces WHERE id=?').get(race.id).status,'closed')}finally{if(oldSocket===undefined)delete process.env.RUNTIME_SOCKET;else process.env.RUNTIME_SOCKET=oldSocket;await new Promise(r=>control.close(r))}});
 test('trusted loopback proxy keeps login limits separate per real client',async()=>{const old=process.env.TRUST_PROXY;process.env.TRUST_PROXY='1';try{createUser('proxy_login','Initial!12345');const send=(ip,password)=>fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json','x-forwarded-for':ip},body:JSON.stringify({username:'proxy_login',password})});for(let i=0;i<15;i++)assert.equal((await send('198.51.100.11','incorrect')).status,401);assert.equal((await send('198.51.100.11','Initial!12345')).status,429);assert.equal((await send('198.51.100.12','Initial!12345')).status,200)}finally{if(old===undefined)delete process.env.TRUST_PROXY;else process.env.TRUST_PROXY=old}});
+
+test('daily practice persists the same 50 questions, prioritizes wrong originals and isolates accounts',async()=>{
+ const {theory}=await import('../src/bank.mjs'),u=await account('daily_a'),other=await account('daily_b');
+ for(const q of theory.slice(0,7))await u.call('/api/progress','PATCH',{id:q.id,wrong:true});
+ const first=(await u.call('/api/theory/session','POST',{context:'daily'})).data;
+ assert.equal(first.questions.length,50);assert.equal(new Set(first.questions.map(q=>q.id)).size,50);
+ for(const q of theory.slice(0,7))assert(first.questions.some(v=>v.id===q.id));assert(first.questions.every(q=>q.answer===undefined));
+ const q=first.questions[0],full=theory.find(v=>v.id===q.id),payload={context:'daily',sessionId:first.id,id:q.id,answer:full.type==='m'?full.answer.split(''):full.answer};
+ assert.equal((await u.call('/api/theory/submit','POST',payload)).status,200);
+ const count=db.prepare('SELECT COUNT(*) n FROM attempts WHERE user_id=?').get(u.id).n;
+ assert.equal((await u.call('/api/theory/submit','POST',payload)).status,200);
+ assert.equal(db.prepare('SELECT COUNT(*) n FROM attempts WHERE user_id=?').get(u.id).n,count);
+ const again=(await u.call('/api/theory/session','POST',{context:'daily'})).data;
+ assert.deepEqual(again.questions.map(q=>q.id),first.questions.map(q=>q.id));assert.equal(again.index,1);assert.equal(again.completed,1);
+ assert.equal((await u.call('/api/theory/session','POST',{context:'daily',restart:true})).status,409);
+ assert.equal((await other.call('/api/theory/session','PATCH',{context:'daily',id:first.id,index:2})).status,409);
+ // Moving a saved batch to yesterday must not discard an unfinished batch.
+ const row=db.prepare('SELECT state FROM theory_sessions WHERE user_id=? AND context=?').get(u.id,'daily');const old=JSON.parse(row.state);old.created-=86400000;
+ db.prepare('UPDATE theory_sessions SET state=? WHERE user_id=? AND context=?').run(JSON.stringify(old),u.id,'daily');
+ assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.id,first.id);
+ for(const q of again.questions.slice(1)){const full=theory.find(v=>v.id===q.id);assert.equal((await u.call('/api/theory/submit','POST',{...payload,id:q.id,answer:full.type==='m'?full.answer.split(''):full.answer})).status,200)}
+ assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.completed,50);
+ assert.notEqual((await u.call('/api/theory/session','POST',{context:'daily',restart:true})).data.id,first.id);
+});
+
+test('theory practice restores selections and position, with stable wrong-review navigation',async()=>{
+ const {theory}=await import('../src/bank.mjs'),u=await account('resume_a');
+ let s=(await u.call('/api/theory/session','POST',{context:'regular',type:'m'})).data;
+ const target=s.questions[5],value=Object.keys(target.options).slice(0,2);
+ assert.equal((await u.call('/api/theory/session','PATCH',{context:'regular',id:s.id,index:5,questionId:target.id,answer:value})).status,200);
+ s=(await u.call('/api/theory/session','POST',{context:'regular'})).data;assert.equal(s.type,'m');assert.equal(s.index,5);assert.deepEqual(s.answers[target.id].answer,value);
+ assert.equal((await u.call('/api/theory/session','PATCH',{context:'regular',id:s.id,index:-1})).status,400);
+ assert.equal((await u.call('/api/theory/session','PATCH',{context:'regular',id:s.id,index:999})).status,400);
+ const wrongs=theory.filter(q=>q.type==='s').slice(0,2);for(const q of wrongs)await u.call('/api/progress','PATCH',{id:q.id,wrong:true});
+ const w=(await u.call('/api/theory/session','POST',{context:'wrong',type:'s',startId:wrongs[0].id})).data;
+ await u.call('/api/theory/submit','POST',{context:'wrong',sessionId:w.id,id:wrongs[0].id,answer:wrongs[0].answer});
+ const resumed=(await u.call('/api/theory/session','POST',{context:'wrong'})).data;
+ assert.equal(resumed.questions.length,2);assert.equal(resumed.index,1);assert.equal(resumed.questions[1].id,wrongs[1].id);
+ await u.call('/api/progress','PATCH',{id:wrongs[0].id,wrong:false});assert.equal((await u.call('/api/theory/session','POST',{context:'wrong'})).data.questions.length,2);
+ const regular=(await u.call('/api/theory/session','POST',{context:'regular'})).data;assert.equal(regular.index,5);assert.equal(regular.type,'m');
+ const exam=(await u.call('/api/exams','POST',{kind:'theory',mode:'official'})).data;
+ assert.equal((await u.call('/api/theory/session','POST',{context:'regular'})).status,409);
+ assert.equal((await u.call('/api/theory/submit','POST',{context:'wrong',sessionId:w.id,id:wrongs[1].id,answer:wrongs[1].answer})).status,409);
+ await u.call('/api/attempts/'+exam.id+'/finish','POST',{});
+});
+
+test('existing learners continue after their last submitted original question on first upgrade',async()=>{
+ const {theory}=await import('../src/bank.mjs'),u=await account('legacy_learner'),q=theory.filter(q=>q.type==='j')[17];
+ await u.call('/api/theory/submit','POST',{id:q.id,answer:q.answer});
+ const resumed=(await u.call('/api/theory/session','POST',{context:'regular'})).data;
+ assert.equal(resumed.type,'j');assert.equal(resumed.index,18);assert.equal(resumed.questions[18].number,19);
+});
+
+test('daily pool contains only wrong originals when more than 50 are available',async()=>{
+ const {theory}=await import('../src/bank.mjs'),u=await account('daily_priority');
+ const ids=theory.slice(0,70).map(q=>q.id);for(const id of ids)await u.call('/api/progress','PATCH',{id,wrong:true});
+ const daily=(await u.call('/api/theory/session','POST',{context:'daily'})).data;
+ assert.equal(daily.questions.length,50);assert(daily.questions.every(q=>ids.includes(q.id)));
+ const answer=daily.questions[0].type==='m'?['Z']:'Z';
+ assert.equal((await u.call('/api/theory/submit','POST',{context:'daily',sessionId:daily.id,id:daily.questions[0].id,answer})).status,400);
+ assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.completed,0);
+});
+
+test('unanswered exam questions score zero without inflating practiced questions or wrong book',async()=>{
+ const {theoryMap}=await import('../src/bank.mjs'),u=await account('skipped_exam');
+ const a=(await u.call('/api/exams','POST',{kind:'theory',mode:'official'})).data;
+ const q=a.questions[0],correct=theoryMap.get(q.id).answer;
+ await u.call('/api/attempts/'+a.id,'PATCH',{revision:0,answers:{[q.id]:correct,[a.questions[1].id]:'',[a.questions[2].id]:[]}});
+ const done=(await u.call('/api/attempts/'+a.id+'/finish','POST',{})).data;
+ assert.equal(done.score,q.points);assert.equal(done.questions.length,190);
+ let stats=(await u.call('/api/meta')).data.stats;assert.equal(stats.answered,1);assert.equal(stats.wrong,0);assert.equal(stats.submissions,1);
+ const second=(await u.call('/api/exams','POST',{kind:'theory',mode:'official'})).data;
+ const wrong=correct==='T'?'F':'T';await u.call('/api/attempts/'+second.id,'PATCH',{revision:0,answers:{[q.id]:wrong}});
+ await u.call('/api/attempts/'+second.id+'/finish','POST',{});
+ stats=(await u.call('/api/meta')).data.stats;assert.equal(stats.answered,1);assert.equal(stats.wrong,1);assert.equal(stats.submissions,2);
+ const p=(await u.call('/api/progress')).data.questions;assert.equal(p.length,1);assert.equal(p[0].seen,2);
+});
+
+test('runtime transport failures give actionable messages without exposing internal socket paths',async()=>{
+ const {runtime}=await import('../src/runtime.mjs'),old=process.env.RUNTIME_SOCKET;
+ process.env.RUNTIME_SOCKET=path.join(process.env.DATA_DIR,'internal-runtime-not-running.sock');
+ try{await assert.rejects(runtime('status','00000000-0000-4000-8000-000000000001'),e=>e.status===503&&/稍后重试/.test(e.message)&&!e.message.includes('sock')&&!e.message.includes(process.env.DATA_DIR))}finally{if(old===undefined)delete process.env.RUNTIME_SOCKET;else process.env.RUNTIME_SOCKET=old}
+});
