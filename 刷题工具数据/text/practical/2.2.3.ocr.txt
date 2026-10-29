@@ -1,0 +1,291 @@
+【PDF第49页】
+In L1」：
+2.2.3
+import pandas as pd
+from sklearn. model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+import pickle
+from sklearn. metrics import mean_squared_error, r2_score
+import xgboost as xgb
+# 加载数据集
+df = pd. read_csv（ fitness analysis.csv'）
+＃ 显示前五行数据
+print （df.head（））
+# 去除所有字符串字段的前后空格
+df= df.applymap （lambda x: x. strip（） if isinstance（x, str） else x）
+# 检查和清理列名
+df.columns = df.columns.str.strip（）
+＃ 选择相关特征进行建模
+X= df［［' Your gender'，'How important is exercise to you ？'，' How healthy do you con
+sider yourself？'］］
+X= pa. get_dummies （X）
+# 将分类变量转为数值变量
+# 将年龄段转为数值变量
+y = dfE Your age'］.apply （lambda x: int（x.split（”'）［o］）） # 假设年龄段为整数
+# 将数据集划分为训练集和测试集（测试集占比20%）
+X_train, X_test, y_train, y_test = train_test_split （X, y, test_ size=0.2, random_state=
+42）
+# 创建随机森林回归模型（创建的决策树的数量为100）
+rf_model = RandomForestRegressor （n_estimators=100,random_state=42）
+＃ 训练随机森林回归模型
+rf_model. fit （X_train, y_train）
+# 保存训练好模型
+with open（2.2.3_model.pkl'，' wb'） as model_file：
+pickle. dump （rf_model, model_file）
+#进行结果预测
+y_pred = rf_model. predict （X_test）
+results_df= pd. DataFrame （y_pred,columns=［’预测结果’］）
+results_df.to_csv（'2.2.3_results. txt'，index=False）
+# 便用测试工具对模型进行测试，并记录测试结果
+train_score = rf_model. score （X_train, y_train）
+#训练集分数
+test_score = rf_model. score （X_test, y_test）
+#测试集分数
+mse = mean_squared_error （y_test, y_pred）
+#均方误差
+r2=
+r2_score（y_test, y_prea）
+#决定系数
+with
+open（'2.2.3_report. txt'，'w'）as report_file：
+report_file.write（f'训练集得分：｛train_score｝ \n'）
+report_file. write （f' 测试集得分：（test_score｝ \n'）
+report_file. write （f' 均方误差（MSE）： ｛mse｝ ＼n'）
+report_file. write （f”' 决定系数（R'2）：（r2｝ \n'）
+# 运用工具分析算法中错误案例产生的原因并进行纠正
+# 初始化XGBoost回归模型（构建100棵树）
+xgb_model = xgb. XGBRegressor （n_estimators=100，
+random_state=42）
+# 训练XGBoost回归模型
+46
+
+【PDF第50页】
+xgb_model. fit （X_train, y_train）
+# 使用XGBoost回归模型在测试集上进行结果预测
+y_prea_xgo = xgb_model. predict （X_test）
+results_df_xgb = pd. DataFrame （y_pred_xgb, columns=［' 预测结果’］）
+results_df_xgb. to_CSv（'2.2.3_results_xgb. txt'，index=False）
+with open（'2.2.3_report_xgb.txt'，
+'w'）as xgb_report_file：
+xgb_report_file. write （f' XCBoost训练集得分：｛xgb_model. score （X_train, y_train）｝
+xgb_report_file. write（f' XGBoost测试集得分：｛xgb_model. score （X_test, y_test）｝\n'）
+xgb_report_file. write （f' XGBoost均方误差（MSE）：（mean_squared_error （y_test, y_pred
+xgb）ハn'）
+xgb_report_file. write （f' XGBoost決定系数（R'2）：｛r2_score （y_test, y_pred_xgb）｝\n'）
+Made by QuadAIT
+4/
+
+【PDF第51页】
+Timestamp Your name
+0 2019/07/03 11:48:07 PM GMT+5:30
+Parkavi
+1 2019/07/03 11:51:22 PM GMT+5:30
+Nithilaa
+2019/07/03 11:56:28 PM GMT+5:30
+Karunya v
+3
+4
+2019/07/04 5:43:35 AM GMT+5:30
+Anusha
+2019/07/04 5:44:29 AM GMT+5:30
+Nikkitha
+Your gender
+Your age
+Female
+19 to 25
+Female
+19 to 25
+Female
+15 to 18
+Female
+15 to 18
+Female
+19 to 25
+How important is exercise to you ？
+0
+1
+4
+2
+4
+3
+4
+3
+0
+1
+23
+4
+How do you deseribe your current level of fitness ？
+Good
+Very good
+Good
+Good
+Unfit
+0
+1
+2
+3
+4
+How often do you exercise？
+Never
+Never
+1 to 2 times a week
+3 to 4 times a week
+Never
+What barriers, if any, prevent you from exercising more regularly？
+ease select all that apply）
+0
+1
+2
+3
+4
+I don' t have enough time;I can' t stay motivated
+I don' t have enough time; T' 11 become too tired
+I can't stay motivated
+I don' t have enough time
+Ican' t stay motivated
+What form（s） of exercise do you currently participate in ？
+（Please select all that apply）
+0
+1
+2
+3
+4
+I don't really exercise
+Walking or jogging;Swimming
+Walking or jogging
+Walking or jogging;Gym; Lifting weights
+I don' t really exercise
+0
+1
+2
+3
+4
+Do you exercise
+？
+I don' t really exercise
+With a group
+Alone
+Alone
+I don' t really exercise
+0
+1
+2
+3
+4
+What time if the day do you prefer to exercise？
+Early morning
+Early morning
+Early morning
+Evening
+Evening
+0
+How long do you spend exercising per day？\
+I don't really exercise
+I don't really exercise
+48
+（P1
+
+【PDF第52页】
+2
+3
+4
+30 minutes
+1 hour
+I don't really exercise
+0
+1
+2
+3
+4
+Would you say you eat a healthy balanced diet ？
+Not always
+Not always
+Not always
+Yes
+Yes
+What prevents you from eating a healthy balanced diet, If any？
+（Please select all that apply）
+0 Ease of access to fast food;Temptation and cra...
+1 Ease of access to fast food;Temptation and cra...
+2
+Temptation and cravings
+3
+Temptation and cravings
+4
+Ease of access to fast food;Temptation and cra...
+How healthy do you consider yourself？\
+0
+1
+2
+3
+4
+3
+4
+4
+4
+4
+Have you ever recommended your friends to follow a fitness routine？\
+0
+1
+2
+3
+4
+Yes
+Yes
+Have you ever purchased a/fitness equipment？
+0
+2
+3
+4
+No
+No
+Yes
+No
+No
+What motivates you to exercise？
+（Please select all that applies）
+0 T'm sorry... I'm not really interested in exe..
+1 I want to be fit;I want to be flexible;I want ...
+234
+I want to be fit
+- want to be fit;I want to lose weight
+I want to be fit
+In［］：
+49
+
+【PDF第53页】
+2.2.3.00cx
+2.2.3
+请勿修改答题卷，在指定单元格内填写答案
+针对随机森林模型（以下三题各1分）
+1、模型性能（答案在 report.txt 文件中）
+训练集得分
+0.12387053768702816
+测试集得分
+-0.09219954290443844
+均方误差（MSE）
+109.76692738027478
+决定系数（R2）
+-0.09219954290443844
+2、错误分析
+1.过拟合：模型在训练集上的得分较高，而在测试集上的得分较低，这表明模
+型可能过拟合了训练数据，即模型学到了训练数据中的噪声而不是潜在的模
+式。
+2.特征不足：所选特征可能不足以捕捉到年龄与所选特征之间的复杂关系。只
+有三个特征（性别、锻炼的重要性、自我感觉的健康程度）可能不足以全面地描
+述年龄的变化规律。
+3.数据量或质量：数据集可能较小或存在质量问题，比如异常值、缺失值等问
+题，影响了模型的泛化能力。
+3、改进建议
+1.特征工程：
+增加更多相关特征：可以从原始数据中提取更多有用特征，比如锻炼频率、
+饮食习惯等。
+特征选择：使用特征选择技术来确定哪些特征对于预测最有帮助。
+特征构造：创建新的特征组合，比如将多个特征结合起来形成更有意义的衍生
+特征。
+2. 模型选择与调参：
+调整模型参数：通过网格搜索或随机搜素调整随机森林的参数，比如
+n_estimators、max_depth等。
+尝试其他模型：可以考虑使用其他回归模型，如支持向量机（SVM）、棉度提升
+树（如 XGBoost）等。
+50

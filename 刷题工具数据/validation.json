@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "theory_questions": 900,
+  "theory_answers_exactly_match_selected_excel": 900,
+  "practical_questions": 40,
+  "code_tasks": 20,
+  "answer_pages_present_and_readable": 86,
+  "native_answer_text_characters": 26754,
+  "tasks_with_original_materials": 35,
+  "copied_material_files": 74,
+  "original_mock_question_references": 190,
+  "selected_source_files_hash_verified": true,
+  "answer_source_policy_checked": true,
+  "limitations": [
+    "代码OCR未逐字符确认，不作为自动判分答案。",
+    "本次校验数据归档完整性及答案来源一致性，不重新评判用户选定答案。",
+    "保留用户原参考答案，不承诺实际考试阅卷接受哪些等价写法。"
+  ]
+}

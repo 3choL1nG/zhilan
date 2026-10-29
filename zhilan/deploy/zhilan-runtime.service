@@ -1,0 +1,23 @@
+[Unit]
+Description=Zhilan isolated Python runtime controller
+After=docker.service
+Requires=docker.service
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/srv/zhilan/current
+EnvironmentFile=/etc/zhilan/runtime.env
+Environment=DOCKER_CONFIG=/run/zhilan/docker
+ExecStart=/usr/local/bin/node /srv/zhilan/current/src/controller.mjs
+Restart=on-failure
+RestartSec=3
+RuntimeDirectory=zhilan
+RuntimeDirectoryMode=0755
+UMask=0077
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/run/zhilan
+[Install]
+WantedBy=multi-user.target

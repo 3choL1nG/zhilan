@@ -1,0 +1,179 @@
+【PDF第12页】
+In L1」：
+In
+［2」：
+1.1.5
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+# 1. 数据采集
+#从本地文件中读取数据 2分
+data = pd. read_csv（'vehicle_traffic_data.csv'）
+print（”数据采集完成，已加载到DataFrame中^）
+# 打印数据前5条记录 2分
+print （data. headO）
+数据采集完成，已加载到DataFrame中
+VehicleID DriverName Age Gender
+Driver_1
+Male
+1
+2
+3
+4
+2
+Driver_2
+3
+Driver_3
+4 Driver_4
+5
+Driver_5
+65
+18
+21
+21
+Male
+Male
+Male
+Male
+Speed Trave1Distance
+17
+128
+167
+38
+193
+242
+438
+792
+999
+364
+Trave1Time
+\
+854. 117647
+205.312500
+284.550898
+1577.368421
+113.160622
+1.1.5-1.jpg
+0
+2
+3
+4
+TrafficEvent
+Normal
+Accident
+Breakdown
+Traffic Jam
+Breakdown
+# 2.数据清洗与预处理
+# 处理缺失值（删除）
+data = data. dropna （）
+2分
+＃数据类型转换
+datal' Age'1
+datal' Age' ］. astype （int）
+#Age数据类型转换为int 1分
+data
+［ Speed
+=datar Speed'
+.astype （float）
+#Speed数据类型转换为float 1分
+datal TraveIDistance'
+=） data［' Trave1Distance' ］. astype （float）
+#Trave1Distance数
+据类型转换为float 1分
+data［' TravelTime'］ = data［' TravelTime' ］.astype （float）
+#TravelTime数据类型转换为f
+loat 1分
+# 处理异常值
+、2分
+data = data［ （datal' Age' ］. between （18, 70））&
+（dataL Speed'
+J. between （0,200））&
+datal' TravelDistance' ］. between （1,1000））&
+（datal Trave1Time'］. between （1, 1440））］
+#保存清洗后数据 1分
+data. to_csvC' cleaned_vehicle_traffic_data.csv'，index-False）
+print（“数据清洗完成，已保存为'cleaned_vehicle_traffic_data.csv°"）
+数据清洗完成，己保存为'cleaned_vehicle_traffic_data.csv°
+9
+
+【PDF第13页】
+In
+3」：
+# 3.数据合理性审核
+# 审核字段合理性1分
+unreasonable_data = data［~（data［' Age' ］. between （18, 70）） &
+（datal’ Speed' ］. between （0,200））&
+data［' TravelDistance'］. between（1,1000））&
+（data［' TraveITime' ］.between （1, 1440）））］
+print（”不合理数据：\n‘”，unreasonable_data）
+# 4.数据统计
+# 统计每种交通事件的发生次数2分
+traffic_event_counts = data［' TrafficEvent' ］.value_counts（）
+print（”每种交通事件发生次数：\n"，traffic_event_counts）
+# 统计不同性别的平均车速、行驶距离和行驶时间2分
+gender_stats = data. groupby（'Gender'）.agg（｛'Speed’：'mean’，
+，TravelDistance'：'mean'，
+'TravelTime'：'mean'F）
+print（”不同性别的平均车速、行驶距离和行驶时间：\n^，gender_stats）
+# 统计不同年龄段驾驶员数
+5分
+age_labels= ［ 18-25'，
+'36-45
+'46-55'，'56-65'，
+、65+'］
+data［' AgeGroup'］ = pd. cut （data［' Age'
+，bins=age_bins,labels=age_labels, right=Fals
+e）
+age_group_counts = data［' AgeGroup'］. value_counts（）
+print（”不同年龄段的驾驶员数：\n'，age_group_counts）
+不合理的数据：
+Empty DataFrame
+Columns: LVehiclelD, DriverName, Age, Gender, Speed, TravelDistance, TravelTime, 1
+rafficEvent」
+Index：
+每种交通事件发生次数：
+1.1.5-2.jpg
+TrafficEvent
+Accident
+229
+Normal
+227
+1.1.5-3.jpg
+Traffic Jam
+218
+Breakdown
+204
+Name：
+Count
+atype：
+1nt.64
+不同性别的平均车速、行驶距离和行驶时间：
+Speed
+TravelDistance TravelTime
+Gender
+Female 105.130820
+Male
+108.918033
+不同年龄段的驾驶员数：
+AgeGroup
+46-55
+172
+36-45
+169
+56-65
+159
+26-35
+154
+18-25
+151
+65+
+73
+Name：
+count, dtype: int64
+1.1.5-4.jpg
+487.476718 359.628355
+477.932084
+359.134097
+1.1.5-5.jpg
+10

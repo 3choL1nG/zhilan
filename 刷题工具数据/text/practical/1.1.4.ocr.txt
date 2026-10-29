@@ -1,0 +1,156 @@
+【PDF第10页】
+In L1」：
+In
+2」：
+1.1.4
+import pandas
+import numpy as np
+import matplotlib. pyplot as plt
+# 1. 数据采集
+# 从本地文件中读取数据 2分
+pandas. read_csv（'user_behavior_data.csv'）
+print（“数据采集完成，已加载到DataFrame中^）
+# 打印数据前5条记录 2分
+print （data. head （））
+数据采集完成，已加载到DataFrame中
+UserID UserName
+Gender
+Location
+LastLogin
+PurchaseAmount
+0
+1
+2
+3
+4
+User_1
+62 Female
+Location_1 2023-06-10
+118
+User_2
+Female
+Location_2
+2023-08-14
+466
+User_3
+Location_3
+2023-02-17
+869
+User_4
+21 Female Location_4
+2023-03-14
+486
+User_5
+Male Location_5
+2023-07-26
+753
+0
+1
+2
+3
+4
+PurchaseCategory
+Clothing
+Electronics
+Home & Garden
+Books
+Home & Garden
+ReviewScore LoginFrequency
+3
+Monthly
+4
+Weekly
+3
+Weekly
+2
+Weekly
+1
+Monthly
+# 2.数据清洗与预处理
+# 处理缺失值（删除）
+data = data. dropna （）
+2分
+＃数据类型转换
+data［' Age'］
+= data［' Age' ］. astype （int）
+# Age数据类型转换为int 2分
+data
+PurchaseAmount
+= data［' PurchaseAmount'］.astype（float）# PurchaseAmount数据类
+型转换为float 2分
+data［' ReviewScore'
+data［' ReviewScore' ］. astype （int）
+# ReviewScore数据类型转换为i
+nt 2分
+# 处理异常值
+2分
+data = data［（data［' Age'］. between （18, 70））&
+（data［' PurchaseAmount'］>0）&
+（datal' ReviewScore'］. between （1, 5））］
+#数据标准化
+data［' PurchaseAmount'］= （data［' PurchaseAmount'］ - data［' PurchaseAmount'］.mean（））/
+data［' PurchaseAmount'］. std （）
+# PurchaseAmount数据标准化 2分
+data［' ReviewScore'］=（data［' ReviewScore'］- data［' ReviewScore' ］. mean（））／ datal' Rev
+iewScore' ］. std（）
+# ReviewScore数据标准化2分
+# 保存清洗后数据 1分
+data.to_csv（'cleaned_user_behavior_data. csv'，index=False）
+print（“数据清洗完成，己保存为'cleaned_user_behavior_data.cSV' "）
+数据清洗完成，已保存为'cleaned_user_behavior_data.csv'
+7
+
+【PDF第11页】
+In ［3」：
+# 3.数据统计
+# 统计每个购买类别用户数 2分
+purchase_category_counts = datal' PurchaseCategory'］. value_counts（）
+print（“每个购买类别用户数：\n'，purchase_category_counts）
+# 统计不同性别的平均购买金额 2分
+gender purchase_amount_mean = data. groupby （'Gender'） ［' PurchaseAmount' ］. mean （）
+print（”不同性别的平均购买金额：\n”，gender_purchase_amount_mean）
+# 统计不同年龄段的用户数 2分
+bins = ［18, 26, 36，
+46,56, 66, np.inf］
+age_group_counts = datal' AgeGroup' ］.value_counts O .sort_index（）
+print（”不同年龄段的用户数：\n”，age_group_counts）
+每个购买类别钓用户数：
+PurchaseCategory
+Clothing
+214
+Electronics
+213
+1.1.4-1.jpg
+Home & Garden
+203
+Food
+197
+BOOKS
+173
+Name：
+Count，
+dtype: int64
+不同性别钓平均购买金额：
+Gender
+Female
+-0.001367
+Male
+0.001458
+Name: PurchaseAmount, dtype： float64
+个同年龄段的用厂数：
+AgeGroup
+18-25
+26-35
+36-45
+46-55
+56-65
+65+
+167
+175
+191
+191
+176
+100
+Name: count, dtype: int64
+1.1.4-3.jpg
+1.1.4-2.jpg

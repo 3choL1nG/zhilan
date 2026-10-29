@@ -1,0 +1,204 @@
+【PDF第26页】
+In L4」：
+2.1.3
+import pandas as pd
+＃加载数据
+data = pd. read_csv（ finance数据集.cSv'）
+# 显示前五行数据
+print （data. head（））
+import matplotlib.pyplot as plt
+import seaborn as sns
+# 设置图像尺寸
+plt. figure （figsize=（12,8））
+# 识别数值列用于线图
+numeric_cols = data. select_dtypes （include=［' float64'，' int64'］）.colums
+# 创建稍线图
+for i, col in enumerate （numeric_cols，
+1）：
+plt. subplot（3,4,i）
+sns. boxplot （x=data［col］）
+plt. title （col）
+plt. tight_layout（）
+plt. show（）
+# 使用IQR处理异常值
+Q1 = data［numeric_cols」.quantile （0.25）
+Q3 = data_numeric_cols」.quantile （0.75）
+IQR
+Q3-
+#移除异常值
+data_cleaned = dataL~（（data［numeric_cols］〈（Ql - 1.5 * IQR））
+＞（03 + 1.5 * IQR）））.any （axis=1）」
+｜ （data［numeric_Cols」
+＃检查处理重复值
+duplicates = data_cleaned. duplicated（）
+num_duplicates =duplicates. sum（）
+data_cleaned = data_cleaned［~duplicates］
+print（f'删除的重复行数：｛num_duplicates｝'）
+#对数据进行归一化处理
+from sklearn. preprocessing import MinMaxScaler
+scaler = MinMaxScaler（）
+data_cleanedLnumeric_cols」= scaler. fit_transform （data_cleaned ［numeric_cols］）
+# 设定目标变量
+target_variable = 'SeriousDlqin2yrs'
+from sklearn. model_selection import train_test_split
+＃定义特征和目标
+X = data_cleaned. drop （columns=［target_variable］） #1分
+y = data_cleaned［target_variable」
+#1分
+# 划分数据（训练集占80%）
+X_train, X_test, y_train, y_test = train_test_split （X, y, test_size-0.2, random_state=42）
+23
+
+【PDF第27页】
+# 显示划分后钓数据形状
+print（f'训练数据形状：｛X_train. shape｝'）
+print（f”测试数据形状：｛X_test.shape｝'）
+# 保存清洗后数据到CSV
+cleaned_file_path= '2.1.3_cleaned_data.csv'
+data cleaned. to_csv （cleaned_file_path, index=False）
+Made by QuadAIT
+24
+
+【PDF第28页】
+0
+1
+2
+3
+4
+0
+4
+0
+2
+3
+4
+0
+1
+2
+3
+4
+0
+1
+2
+3
+4
+Unnamed:0
+SeriousDlqin2yrs
+1
+2
+3
+4
+5
+1
+0
+0
+0
+0
+RevolvingUtilizationOfUnsecuredLines
+0.766127
+0.957151
+0.658180
+0.233810
+0.907239
+NumberOfTime30-59DaysPastDueNotWorse
+2
+0
+1
+0
+DebtRatio
+0.802982
+0.121876
+0.085113
+0.036050
+0.024926
+MonthlyIncome
+9120
+2600
+3042
+3300
+63588
+NumberOfOpenCreditLinesAndLoans
+NumberOfTimes9oDaysLate
+age
+45
+40
+38
+30
+49
+13
+4
+NumberRealEstateLoansOrLines
+0
+0
+NumberOfTime60-89DaysPastDueNotWorse
+6
+0
+0
+0
+NumberOfDepenaents
+2
+1
+0
+0
+0
+Unnamed:0
+SeriousDlqinzyrs
+RevolvingUtilizationOfUnsecuredLines
+age
+100000
+Unnamed:0
+NumberofTime30-59DaysPastDueNotWorse
+0.5
+SeriousDlqin2yrs
+DebtRatio
+RevolvingUtilizationOfUnsecuredLines
+MonthlyIncome
+100
+age
+NumberofOpenCreditLinesAndLoans
+10
+NumberOfTime30-59DaysPastDueNotWorse
+NumberOfTimes9oDaysLate
+200000
+25
+50
+DebtRatio
+MonthlyIncome1e6
+NumberOfOpenCreditLinesAndLoans
+NumberRealEstateLoansOrLimheaberOfTime60-89DaysPastDueNotWorse NumberOfDependents
+事な
+20
+NumberRealEstateLoansOrLines
+10
+NumberOfTime60-89DaysPastDueNotWorse
+10
+20
+NumberOfDependents
+0L
+NumberOfTimes90DaysLate
+删除的重复行数：3
+训练数据形状：（61105，11）
+测试数据形状：（15277,11）
+25
+
+【PDF第29页】
+2.1.3.docx
+2.1.3
+请勿修改答题卷，在指定单元格内填写答案
+制定数据清洗规范（每正确回答1个规范点得1分，最高得3分）
+1. 数据加载：使用 pandas 库加载数据集，检查数据的基本结构和类型。
+2. 异常值处理：使用稍线图对每个数值变量进行可视化，识别潜在钓异常值。
+3.重复值处理：检查并移除数据集中的重复值，以确保数据的唯一性和完整性。
+4. 数据标准化：对数值型数据进行标准化，以消除量纲影响，使用标准化方法。
+5.保存清洗后的数据：将经过清洗和处理后的数据保存为新的 CSV 文件，以便后续使
+用。
+（答对3点即可）
+制定特征工程规范（每正确回答1个规范点得1分，最高得2分）
+1.数据来源：标注数据的来源，包括数据集的名称、获取日期和数据提供者。
+2.数据描述：提供详细的数据描述，包括每列数据的含义、单位和可能的取值范围。
+3.特征选择：确定对目标变量预测最有用的特征。
+4.目标变量设定：将数据集中用于预测的目标变量定义为“SeriousDlqinzyrs”。
+5.数据划分：将数据分为训练集和测试集，通常采用 80/20 的比例，以便于模型的训练
+和评估。
+6.保存处理后的数据：保存处理后的数据，并记录保存文件路径和文件名。
+7.数据清洗和标注规范文档。
+（答对2点即可）

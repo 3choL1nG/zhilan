@@ -1,0 +1,55 @@
+【PDF第69页】
+In L3」：
+3.2.2
+import onnxruntime
+import numpy as np
+from PIL import Image
+＃ 加载ONNX模型
+2分
+ort_session =
+onnxruntime.Inferencesession（'mnist.onnx'）
+# 加载冬像 2分
+image=
+Image.open（'img_test.png'）.convert（'L'） # 转为灰度图
+#图像预处理
+image = image.resize（（28,28））
+# 调整大小为MNIST模型时输入尺于2分
+Larray = np.asarray（image, dtype=np.float32） # 转为numpy数组2分
+image_array =
+np.expand_aims （image_array，axis=e） # 添加batch维度2分
+image_array=
+np.expand_dims （
+（Image_array，axis=） # 添加通道维度2分
+#返回模型输入列表 2分
+ont_inputs= tont_session.get_inputs（）［e」.name: image_array｝
+# 执行预测
+2分
+ort_outs
+ort_session.run（None, ort_inputs）
+# 获取预测结果 2分
+predicted_Class= np.argmax（ort_outs［e］）
+# 输出预测结果
+print（f"predicted class： ｛predicted_class｝"）
+Predicted class:8
+3.2.2-1.jpg
+InL」：
+
+【PDF第70页】
+3.2.2.docx
+3.2.2
+请勿修改答题卷，在指定单元格内填写答案
+人机交互的最优方式（答对3条以上正确得1分）
+1.界面设计：设计一个简洁的用户界面，包含一个上传按钮和一个显示识别结
+果区域。
+2. 模型加载：启动系统时自动加载"mist.onnx“模型，无需用户干预。
+3.图像上传：用户通过界面上传手写数字图片"img_test. png”。
+4. 预处理：系统自动对上传的图片进行预处理，如调整大小、灰度化、标准化
+等。
+5.识别执行：处理完成后，系统自动使用“mist.onnx”模型进行数字识别。
+6.结果显示：在界面上清晰展示识别出的数字，并提供语音反馈作为辅助。
+7.反馈机制：允许用户提供反馈，如“正确“或”错误”，以优化模型性能。
+8.性能优化：确保系统响应迅速，提供即时的识别结果。
+9安全性：确保用户上传的图片数据安全，不被未授权访问。
+10. 多语言界面：提供多语言支持，以适应不同用户的需求。
+二。
+6/

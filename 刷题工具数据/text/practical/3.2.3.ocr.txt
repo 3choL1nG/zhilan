@@ -1,0 +1,69 @@
+【PDF第71页】
+In ［4］：
+# 导入必要的库
+import numpy as np
+3.2.3
+from PIL import Image
+import onnxruntime as ort
+# 定义预处理函数，用于将图片转换为模型所需输入格式
+def preprocess（image_path）：
+input_shape=（1,1, 64,64）
+# 模型输入期望形状，这里是（N,C,H, W），N=batch size, C=channels,H=height,w=width
+img= Image.open（image_path）.convert（'L'）
+# 打开图像文件并将其转换为灰度图1分
+img = img.resize （（64, 64），Image. ANTIALIAS）
+＃ 调整图像大小到模型输入所需尺寸
+img= img.resize（（64, 64），Image.LANCZOS）
+# 调整图像大小到模型输入所需尺寸，（因为PIL版本问题，在 PiLLOw 9.1.8 及以上版本，Image.ANTIALIAS 被弃用，自行修改代码Image.LANCZOS）
+Img_data = np.array（img,dtype=np.float32）
+# 将PIL图像对象转换为numpy数组，并确保数据类型是float32
+# 调整数组钓形状以匹配模型输入钓形状
+img_data =np.expand_dims（img_data, axis=）# 添加 batch 维度
+img_data = np.expand_dims（img_data,axis=1） # 添加 channel 维度
+assert img_data.shape == input_shape, f"Expected shape ｛input_shape｝， but got ｛img_data.shape｝"# 确保最终的形状与模型输入要求的形状一致
+return img_data
+＃返回预处理后钓图像数据
+# 定义情感类别与数字标签映射表 3分
+emotion_table= ｛'neutral'：0，
+'happiness'：1，'surprise'：2， ' sadness'：3，
+anger'：4，'disgust'：5，'fean'：6，'contempt'：7｝
+# 加载模型 3分
+ort_session = ont.Inferencesession（'emotion-ferplus.onnx'）
+# 加载本地图片并进行预处理 3分
+input_data = preprocess（'img_test.png'）
+# 准备输入数据，确保其符合模型输入要求
+ort_inputs= ｛ont_session.get_inputs（）［O］.name： input_data｝
+＃ 运行模型，进行预测 3分
+ort_outs = ort_session, Pun（None, ort_inputs）
+# 解码模型输出，找到预测概率最高的情感类别 3分
+predicted_label = np.argmax（ort_outs［9］）
+#根据预测的标签找到对应情感名称 3分
+predicted_emotion= Iist（emotion_table.keys（）） ［predicted_1abe1］
+# 输出预测情感
+print（f"Predicted emotion： ｛predicted_emotionj"）
+predicted emotion: surprise
+3.2.3-1.jpg
+#使用onnxruntime创建一个会话，用于加载并运行模型
+In ［］：
+# ort_session.get_inputs（）［e］.name 是获取模型的第一个输入名字
+WA AIT
+
+【PDF第72页】
+3.2.3.docx
+3.2.3
+请勿修改答题卷，在指定单元格内填写答案
+人机交互的最优方式（答对3条以上正确得1分）
+1.界面设计：创建一个直观的用户界面，包括一个图像上传区域和一个结果展
+示区域。
+2. 模型和标签加载：系统启动时预加载"emotion-ferplus.onnx"模型和情感类
+别映射表。
+3. 图像上传：用户通过界面上传面部图像"img_test.png”。
+4.图像预处理：系统自动对上传的图像进行必要的预处理，如裁剪、缩放、归
+一化等。
+5.表情识别：预处理完成后，系统自动使用模型进行面部表情识别。
+6.结果展示：在界面上展示识别结果，包括表情类别和相应的数字标签。
+7.反馈收集：提供用户反馈选项，以便用户确认识别的准确性。
+8.结果应用：根据识别结果，系统可以提供进一步的交互或服务，如情感分析
+报告。
+9.性能优化：确保系统响应迅速，减少用户等待时间。
+10.隐私保护：确保用户上传的图像数据安全，遵守隐私保护法规。

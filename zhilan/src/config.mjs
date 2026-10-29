@@ -1,0 +1,11 @@
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+export const ROOT=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+export const DATA=path.resolve(process.env.DATA_DIR||path.join(ROOT,'data'));
+export const BANK=path.resolve(process.env.BANK_DIR||path.join(ROOT,'../刷题工具数据'));
+export const PORT=Number(process.env.PORT||8787);
+export const HOST=process.env.HOST||'127.0.0.1';
+export const COOKIE_SECURE=process.env.COOKIE_SECURE==='1';
+export const RUNTIME_IMAGE=process.env.RUNTIME_IMAGE||'zhilan-python:1';
+export const MAX_WORKERS=Number(process.env.MAX_WORKERS||1);
+export const RUNTIME_MEMORY=process.env.RUNTIME_MEMORY||'1024m';

@@ -1,0 +1,2564 @@
+[
+  {
+    "question_id": "1.1.1",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "1.1.1-M4",
+        "label": "读取数据集",
+        "expected": "data = pd.read_csv('patient_data.csv')",
+        "points": 1,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M5",
+        "label": "按住院天数标记风险等级",
+        "expected": "data['RiskLevel'] = np.where(data['DaysInHospital'] > 7, '高风险患者', '低风险患者')",
+        "points": 3,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M6",
+        "label": "统计风险等级患者数",
+        "expected": "risk_counts = data['RiskLevel'].value_counts()",
+        "points": 2,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M7",
+        "label": "计算高风险占比",
+        "expected": "high_risk_ratio = risk_counts['高风险患者'] / len(data)",
+        "points": 1,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M8",
+        "label": "计算低风险占比",
+        "expected": "low_risk_ratio = risk_counts['低风险患者'] / len(data)",
+        "points": 1,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M9",
+        "label": "按BMI划分区间",
+        "expected": "data['BMIRange'] = pd.cut(data['BMI'], bins=bmi_bins, labels=bmi_labels, right=False)",
+        "points": 4,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M10",
+        "label": "计算BMI区间高风险比例",
+        "expected": "bmi_risk_rate = (data.groupby('BMIRange')['RiskLevel'].apply(lambda x: (x == '高风险患者').mean()))",
+        "points": 2,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M10",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M11",
+        "label": "统计BMI区间患者数",
+        "expected": "bmi_patient_count = data['BMIRange'].value_counts()",
+        "points": 1,
+        "pdf_page": 4,
+        "rubric_id": "1.1.1-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M12",
+        "label": "按年龄划分区间",
+        "expected": "data['AgeRange'] = pd.cut(data['Age'], bins=age_bins, labels=age_labels, right=False)",
+        "points": 4,
+        "pdf_page": 5,
+        "rubric_id": "1.1.1-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M13",
+        "label": "计算年龄区间高风险比例",
+        "expected": "age_risk_rate = data.groupby('AgeRange')['RiskLevel'].apply(lambda x: (x == '高风险患者').mean())",
+        "points": 2,
+        "pdf_page": 5,
+        "rubric_id": "1.1.1-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.1-M14",
+        "label": "统计年龄区间患者数",
+        "expected": "age_patient_count = data['AgeRange'].value_counts()",
+        "points": 1,
+        "pdf_page": 5,
+        "rubric_id": "1.1.1-M14",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "cf7da2a1df6bb405f17e50cac1a38c8a137a6cf61a2ce46c89d5a4cb121b53c6"
+  },
+  {
+    "question_id": "1.1.2",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "1.1.2-M4",
+        "label": "读取数据集",
+        "expected": "data = pd.read_csv('sensor_data.csv')",
+        "points": 2,
+        "pdf_page": 6,
+        "rubric_id": "1.1.2-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.2-M5-blank1",
+        "label": "按传感器类型统计数量和均值 · 第1空",
+        "points": 1,
+        "pdf_page": 6,
+        "rubric_id": "1.1.2-M5",
+        "enabled": true,
+        "expected": "data.groupby",
+        "input_mode": "blank",
+        "blank_number": 1,
+        "template": "sensor_stats = _____________(_____________)['Value']._____________"
+      },
+      {
+        "id": "1.1.2-M5-blank2",
+        "label": "按传感器类型统计数量和均值 · 第2空",
+        "points": 1,
+        "pdf_page": 6,
+        "rubric_id": "1.1.2-M5",
+        "enabled": true,
+        "expected": "'SensorType'",
+        "input_mode": "blank",
+        "blank_number": 2,
+        "template": "sensor_stats = _____________(_____________)['Value']._____________"
+      },
+      {
+        "id": "1.1.2-M5-blank3",
+        "label": "按传感器类型统计数量和均值 · 第3空",
+        "points": 1,
+        "pdf_page": 6,
+        "rubric_id": "1.1.2-M5",
+        "enabled": true,
+        "expected": "agg(['count', 'mean'])",
+        "input_mode": "blank",
+        "blank_number": 3,
+        "template": "sensor_stats = _____________(_____________)['Value']._____________"
+      },
+      {
+        "id": "1.1.2-M6",
+        "label": "按位置和传感器类型统计均值",
+        "expected": "location_stats = data[data['SensorType'].isin(['Temperature', 'Humidity'])].groupby(['Location', 'SensorType'])['Value'].mean().unstack()",
+        "points": 2,
+        "pdf_page": 6,
+        "rubric_id": "1.1.2-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.2-M7-blank1",
+        "label": "标记异常值 · 第1空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M7",
+        "enabled": true,
+        "expected": "np.where",
+        "input_mode": "blank",
+        "blank_number": 1,
+        "template": "data['is_abnormal'] = _____________(\n    ((_____________) & ((data['Value'] < -10) | (data['Value'] > 50))) |\n    ((_____________) & ((data['Value'] < 0) | (data['Value'] > 100))),\n    True, False\n)"
+      },
+      {
+        "id": "1.1.2-M7-blank2",
+        "label": "标记异常值 · 第2空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M7",
+        "enabled": true,
+        "expected": "data['SensorType'] == 'Temperature'",
+        "input_mode": "blank",
+        "blank_number": 2,
+        "template": "data['is_abnormal'] = _____________(\n    ((_____________) & ((data['Value'] < -10) | (data['Value'] > 50))) |\n    ((_____________) & ((data['Value'] < 0) | (data['Value'] > 100))),\n    True, False\n)"
+      },
+      {
+        "id": "1.1.2-M7-blank3",
+        "label": "标记异常值 · 第3空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M7",
+        "enabled": true,
+        "expected": "data['SensorType'] == 'Humidity'",
+        "input_mode": "blank",
+        "blank_number": 3,
+        "template": "data['is_abnormal'] = _____________(\n    ((_____________) & ((data['Value'] < -10) | (data['Value'] > 50))) |\n    ((_____________) & ((data['Value'] < 0) | (data['Value'] > 100))),\n    True, False\n)"
+      },
+      {
+        "id": "1.1.2-M8",
+        "label": "输出异常值数量",
+        "expected": "print(\"异常值数量：\", data['is_abnormal'].sum())",
+        "points": 2,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.2-M9-blank1",
+        "label": "前向与后向填充缺失值 · 第1空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M9",
+        "enabled": true,
+        "expected": "fillna",
+        "input_mode": "blank",
+        "blank_number": 1,
+        "template": "data['Value']._____________(_____________, inplace=True)\ndata['Value']._____________(_____________, inplace=True)"
+      },
+      {
+        "id": "1.1.2-M9-blank2",
+        "label": "前向与后向填充缺失值 · 第2空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M9",
+        "enabled": true,
+        "expected": "method='ffill'",
+        "input_mode": "blank",
+        "blank_number": 2,
+        "template": "data['Value']._____________(_____________, inplace=True)\ndata['Value']._____________(_____________, inplace=True)"
+      },
+      {
+        "id": "1.1.2-M9-blank3",
+        "label": "前向与后向填充缺失值 · 第3空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M9",
+        "enabled": true,
+        "expected": "fillna",
+        "input_mode": "blank",
+        "blank_number": 3,
+        "template": "data['Value']._____________(_____________, inplace=True)\ndata['Value']._____________(_____________, inplace=True)"
+      },
+      {
+        "id": "1.1.2-M9-blank4",
+        "label": "前向与后向填充缺失值 · 第4空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M9",
+        "enabled": true,
+        "expected": "method='bfill'",
+        "input_mode": "blank",
+        "blank_number": 4,
+        "template": "data['Value']._____________(_____________, inplace=True)\ndata['Value']._____________(_____________, inplace=True)"
+      },
+      {
+        "id": "1.1.2-M10-blank1",
+        "label": "删除标记列并保存清洗数据 · 第1空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M10",
+        "enabled": true,
+        "expected": "data.drop",
+        "input_mode": "blank",
+        "blank_number": 1,
+        "template": "cleaned_data = _____________(_____________=['is_abnormal'])\n_____________('cleaned_sensor_data.csv', _____________)"
+      },
+      {
+        "id": "1.1.2-M10-blank2",
+        "label": "删除标记列并保存清洗数据 · 第2空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M10",
+        "enabled": true,
+        "expected": "columns",
+        "input_mode": "blank",
+        "blank_number": 2,
+        "template": "cleaned_data = _____________(_____________=['is_abnormal'])\n_____________('cleaned_sensor_data.csv', _____________)"
+      },
+      {
+        "id": "1.1.2-M10-blank3",
+        "label": "删除标记列并保存清洗数据 · 第3空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M10",
+        "enabled": true,
+        "expected": "cleaned_data.to_csv",
+        "input_mode": "blank",
+        "blank_number": 3,
+        "template": "cleaned_data = _____________(_____________=['is_abnormal'])\n_____________('cleaned_sensor_data.csv', _____________)"
+      },
+      {
+        "id": "1.1.2-M10-blank4",
+        "label": "删除标记列并保存清洗数据 · 第4空",
+        "points": 1,
+        "pdf_page": 7,
+        "rubric_id": "1.1.2-M10",
+        "enabled": true,
+        "expected": "index=False",
+        "input_mode": "blank",
+        "blank_number": 4,
+        "template": "cleaned_data = _____________(_____________=['is_abnormal'])\n_____________('cleaned_sensor_data.csv', _____________)"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "cf7da2a1df6bb405f17e50cac1a38c8a137a6cf61a2ce46c89d5a4cb121b53c6"
+  },
+  {
+    "question_id": "1.1.3",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "1.1.3-M1",
+        "label": "统计缺失值",
+        "expected": "missing_values = data.isnull().sum()",
+        "points": 2,
+        "pdf_page": 8,
+        "rubric_id": "1.1.3-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.3-M2",
+        "label": "统计重复值",
+        "expected": "duplicate_values = data.duplicated().sum()",
+        "points": 2,
+        "pdf_page": 8,
+        "rubric_id": "1.1.3-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.3-M12",
+        "label": "审核Age合理性",
+        "expected": "data['is_age_valid'] = data['Age'].between(18, 70)",
+        "points": 2,
+        "pdf_page": 9,
+        "rubric_id": "1.1.3-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.3-M13",
+        "label": "审核Income合理性",
+        "expected": "data['is_income_valid'] = data['Income'] > 2000",
+        "points": 2,
+        "pdf_page": 9,
+        "rubric_id": "1.1.3-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.3-M14",
+        "label": "审核LoanAmount合理性",
+        "expected": "data['is_loan_amount_valid'] = data['LoanAmount'] < (data['Income'] * 5)",
+        "points": 2,
+        "pdf_page": 9,
+        "rubric_id": "1.1.3-M14",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.3-M15",
+        "label": "审核CreditScore合理性",
+        "expected": "data['is_credit_score_valid'] = data['CreditScore'].between(300, 850)",
+        "points": 2,
+        "pdf_page": 9,
+        "rubric_id": "1.1.3-M15",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.3-M17",
+        "label": "筛选有效数据并删除审核辅助列",
+        "expected": "cleaned_data = data[data['is_valid']]\ncleaned_data = cleaned_data.drop(columns=['is_age_valid', 'is_income_valid', 'is_loan_amount_valid', 'is_credit_score_valid', 'is_valid'])\ncleaned_data.to_csv('cleaned_credit_data.csv', index=False)",
+        "points": 2,
+        "pdf_page": 9,
+        "rubric_id": "1.1.3-M17",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "manual_items": [
+      {
+        "id": "1.1.3-M18",
+        "label": "确认cleaned_credit_data.csv文件保存成功",
+        "points": 1,
+        "assessment": "manual_outcome_check",
+        "expected": "cleaned_credit_data.csv文件存在且内容为清洗后的数据",
+        "pdf_page": 9,
+        "note": "这是成果验证分，不计入代码字符串自动评分。"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "cf7da2a1df6bb405f17e50cac1a38c8a137a6cf61a2ce46c89d5a4cb121b53c6"
+  },
+  {
+    "question_id": "1.1.4",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "1.1.4-M1",
+        "label": "读取本地数据",
+        "expected": "data = pandas.read_csv('user_behavior_data.csv')",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M2",
+        "label": "打印前五条记录",
+        "expected": "print(data.head())",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M3",
+        "label": "删除缺失值",
+        "expected": "data = data.dropna()",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M4",
+        "label": "Age转为整数",
+        "expected": "data['Age'] = data['Age'].astype(int)",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M5",
+        "label": "PurchaseAmount转为浮点数",
+        "expected": "data['PurchaseAmount'] = data['PurchaseAmount'].astype(float)",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M6",
+        "label": "ReviewScore转为整数",
+        "expected": "data['ReviewScore'] = data['ReviewScore'].astype(int)",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M7",
+        "label": "筛选合理范围内的数据",
+        "expected": "data = data[(data['Age'].between(18, 70)) &\n            (data['PurchaseAmount'] > 0) &\n            (data['ReviewScore'].between(1, 5))]",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M8",
+        "label": "标准化PurchaseAmount",
+        "expected": "data['PurchaseAmount'] = (data['PurchaseAmount'] - data['PurchaseAmount'].mean()) / data['PurchaseAmount'].std()",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M9",
+        "label": "标准化ReviewScore",
+        "expected": "data['ReviewScore'] = (data['ReviewScore'] - data['ReviewScore'].mean()) / data['ReviewScore'].std()",
+        "points": 2,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M10",
+        "label": "保存清洗后的数据",
+        "expected": "data.to_csv('cleaned_user_behavior_data.csv', index=False)",
+        "points": 1,
+        "pdf_page": 10,
+        "rubric_id": "1.1.4-M10",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M11",
+        "label": "统计各购买类别用户数",
+        "expected": "purchase_category_counts = data['PurchaseCategory'].value_counts()",
+        "points": 2,
+        "pdf_page": 11,
+        "rubric_id": "1.1.4-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M12",
+        "label": "统计不同性别平均购买金额",
+        "expected": "gender_purchase_amount_mean = data.groupby('Gender')['PurchaseAmount'].mean()",
+        "points": 2,
+        "pdf_page": 11,
+        "rubric_id": "1.1.4-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.4-M13",
+        "label": "统计不同年龄段用户数",
+        "expected": "bins = [18, 26, 36, 46, 56, 66, np.inf]\nlabels = ['18-25', '26-35', '36-45', '46-55', '56-65', '65+']\ndata['AgeGroup'] = pandas.cut(data['Age'], bins=bins, labels=labels, right=False)\nage_group_counts = data['AgeGroup'].value_counts().sort_index()",
+        "points": 2,
+        "pdf_page": 11,
+        "rubric_id": "1.1.4-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "cf7da2a1df6bb405f17e50cac1a38c8a137a6cf61a2ce46c89d5a4cb121b53c6"
+  },
+  {
+    "question_id": "1.1.5",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "1.1.5-M1",
+        "label": "读取本地数据",
+        "expected": "data = pd.read_csv('vehicle_traffic_data.csv')",
+        "points": 2,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M2",
+        "label": "打印前五条记录",
+        "expected": "print(data.head())",
+        "points": 2,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M3",
+        "label": "删除缺失值",
+        "expected": "data = data.dropna()",
+        "points": 2,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M4",
+        "label": "Age转为整数",
+        "expected": "data['Age'] = data['Age'].astype(int)",
+        "points": 1,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M5",
+        "label": "Speed转为浮点数",
+        "expected": "data['Speed'] = data['Speed'].astype(float)",
+        "points": 1,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M6",
+        "label": "TravelDistance转为浮点数",
+        "expected": "data['TravelDistance'] = data['TravelDistance'].astype(float)",
+        "points": 1,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M7",
+        "label": "TravelTime转为浮点数",
+        "expected": "data['TravelTime'] = data['TravelTime'].astype(float)",
+        "points": 1,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M8",
+        "label": "筛选合理范围内的数据",
+        "expected": "data = data[(data['Age'].between(18, 70)) &\n            (data['Speed'].between(0, 200)) &\n            (data['TravelDistance'].between(1, 1000)) &\n            (data['TravelTime'].between(1, 1440))]",
+        "points": 2,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M9",
+        "label": "保存清洗后的数据",
+        "expected": "data.to_csv('cleaned_vehicle_traffic_data.csv', index=False)",
+        "points": 1,
+        "pdf_page": 12,
+        "rubric_id": "1.1.5-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M11",
+        "label": "审核字段合理性",
+        "expected": "unreasonable_data = data[~((data['Age'].between(18, 70)) &\n                            (data['Speed'].between(0, 200)) &\n                            (data['TravelDistance'].between(1, 1000)) &\n                            (data['TravelTime'].between(1, 1440)))]",
+        "points": 2,
+        "pdf_page": 13,
+        "source_points_conflict": {
+          "pdf_annotation": 1,
+          "rubric_allocation": 2,
+          "applied_points": 2,
+          "note": "答案PDF页面注释显示1分；original rubric配分列为2分，采用rubric配分列2分。"
+        },
+        "rubric_id": "1.1.5-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M12",
+        "label": "统计交通事件次数",
+        "expected": "traffic_event_counts = data['TrafficEvent'].value_counts()",
+        "points": 2,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M13",
+        "label": "统计不同性别均值",
+        "expected": "gender_stats = data.groupby('Gender').agg({'Speed': 'mean', 'TravelDistance': 'mean', 'TravelTime': 'mean'})",
+        "points": 2,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "1.1.5-M14-blank1",
+        "label": "统计不同年龄段驾驶员数 · 第1空",
+        "points": 1,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M14",
+        "enabled": true,
+        "expected": "pd.cut",
+        "input_mode": "blank",
+        "blank_number": 1,
+        "template": "data['AgeGroup'] = _____________(_____________,_____________,_____________, right=False)\nage_group_counts = _____________"
+      },
+      {
+        "id": "1.1.5-M14-blank2",
+        "label": "统计不同年龄段驾驶员数 · 第2空",
+        "points": 1,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M14",
+        "enabled": true,
+        "expected": "data['Age']",
+        "input_mode": "blank",
+        "blank_number": 2,
+        "template": "data['AgeGroup'] = _____________(_____________,_____________,_____________, right=False)\nage_group_counts = _____________"
+      },
+      {
+        "id": "1.1.5-M14-blank3",
+        "label": "统计不同年龄段驾驶员数 · 第3空",
+        "points": 1,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M14",
+        "enabled": true,
+        "expected": "bins=age_bins",
+        "input_mode": "blank",
+        "blank_number": 3,
+        "template": "data['AgeGroup'] = _____________(_____________,_____________,_____________, right=False)\nage_group_counts = _____________"
+      },
+      {
+        "id": "1.1.5-M14-blank4",
+        "label": "统计不同年龄段驾驶员数 · 第4空",
+        "points": 1,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M14",
+        "enabled": true,
+        "expected": "labels=age_labels",
+        "input_mode": "blank",
+        "blank_number": 4,
+        "template": "data['AgeGroup'] = _____________(_____________,_____________,_____________, right=False)\nage_group_counts = _____________"
+      },
+      {
+        "id": "1.1.5-M14-blank5",
+        "label": "统计不同年龄段驾驶员数 · 第5空",
+        "points": 1,
+        "pdf_page": 13,
+        "rubric_id": "1.1.5-M14",
+        "enabled": true,
+        "expected": "data['AgeGroup'].value_counts()",
+        "input_mode": "blank",
+        "blank_number": 5,
+        "template": "data['AgeGroup'] = _____________(_____________,_____________,_____________, right=False)\nage_group_counts = _____________"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "cf7da2a1df6bb405f17e50cac1a38c8a137a6cf61a2ce46c89d5a4cb121b53c6"
+  },
+  {
+    "question_id": "2.1.1",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.1.1-M1",
+        "label": "读取数据集",
+        "expected": "data = pd.read_csv('auto-mpg.csv')",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M2a",
+        "label": "检查缺失值数量",
+        "expected": "print(data.isnull().sum())",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M2a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M2b",
+        "label": "删除缺失值所在行",
+        "expected": "data = data.dropna()",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M2b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M3",
+        "label": "转换horsepower并处理转换异常值",
+        "expected": "data['horsepower'] = pd.to_numeric(data['horsepower'],errors='coerce')\ndata = data.dropna(subset=['horsepower'])",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M4",
+        "label": "标准化数值型数据",
+        "expected": "data[numerical_features] = scaler.fit_transform(data[numerical_features])",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M5",
+        "label": "选择特征",
+        "expected": "selected_features = ['cylinders', 'displacement', 'horsepower', 'weight', 'acceleration', 'model year', 'origin']",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M6a",
+        "label": "创建自变量",
+        "expected": "X = data[selected_features]",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M6a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M6b",
+        "label": "创建目标变量",
+        "expected": "y = data['mpg']",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M6b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M7",
+        "label": "划分数据集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.1-M8",
+        "label": "保存处理后的数据",
+        "expected": "cleaned_data.to_csv('2.1.1_cleaned_data.csv', index=False)",
+        "points": 1,
+        "pdf_page": 20,
+        "rubric_id": "2.1.1-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "133b6636d2406433be8613f186a18fd36ae7357c620a41755a0b8de917bc30a7"
+  },
+  {
+    "question_id": "2.1.2",
+    "verified": false,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.1.2-M1",
+        "label": "读取数据集",
+        "expected": "data = pd.read_excel('大学生低碳生活行为的影响因素数据集.xlsx')",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M2",
+        "label": "删除缺失值行并统计行数",
+        "expected": "initial_row_count = data.shape[0]\ndata = data.dropna()\nfinal_row_count = data.shape[0]\nprint(f'处理后数据行数: {final_row_count}, 删除的行数: {initial_row_count - final_row_count}')",
+        "points": 2,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M3",
+        "label": "删除重复行",
+        "expected": "data = data.drop_duplicates()",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M4",
+        "label": "标准化数值型数据",
+        "expected": "data[numerical_features] = scaler.fit_transform(data[numerical_features])",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M5",
+        "label": "选择特征并定义自变量",
+        "expected": "selected_features = ['1.您的性别○男性　○女性', '2.您的年级○大一　○大二　○大三　○大四', '3.您的生源地○农村　○城镇（乡镇）　○地县级城市　○省会城市及直辖市', '4.您的月生活费○≤1,000元　○1,001-2,000元　○2,001-3,000元　○≥3,001元', '5.您进行过绿色低碳的相关生活方式吗？', '6.您觉得“低碳”，与你的生活关系密切吗？', '7.低碳生活是否会成为未来的主流生活方式？', '8.您是否认为低碳生活会提高您的生活质量？']\nX = data[selected_features]",
+        "points": 1,
+        "pdf_page": 23,
+        "verified": false,
+        "verification_note": "page-023已重新视觉核对；列表项中的圈选符号与全角空格数量仍无法仅凭比例字体截图确认，保持未启用严格逐字符判分。",
+        "rubric_id": "2.1.2-M5",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M6",
+        "label": "定义目标变量",
+        "expected": "y = data['低碳行为积极性']",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M7",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M8a",
+        "label": "合并处理后的特征和目标变量",
+        "expected": "cleaned_data = pd.concat([X, y], axis=1)",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M8a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.2-M8b",
+        "label": "保存清洗后的数据",
+        "expected": "cleaned_data.to_csv('2.1.2_cleaned_data.csv', index=False)",
+        "points": 1,
+        "pdf_page": 23,
+        "rubric_id": "2.1.2-M8b",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "verification_note": "除2.1.2-M5长列名中的圈选符号/全角空格仍未能逐字符确认外，其余录入已按PDF修正；该项应保持手动核验。",
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "133b6636d2406433be8613f186a18fd36ae7357c620a41755a0b8de917bc30a7"
+  },
+  {
+    "question_id": "2.1.3",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.1.3-M1",
+        "label": "读取数据并显示前五行",
+        "expected": "data = pd.read_csv('finance数据集.csv')\nprint(data.head())",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M2",
+        "label": "按IQR识别并移除异常值",
+        "expected": "Q1 = data[numeric_cols].quantile(0.25)\nQ3 = data[numeric_cols].quantile(0.75)\nIQR = Q3-Q1\ndata_cleaned = data[~((data[numeric_cols] < (Q1 - 1.5 * IQR)) | (data[numeric_cols] > (Q3 + 1.5 * IQR))).any(axis=1)]",
+        "points": 2,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M3",
+        "label": "检查并删除重复值",
+        "expected": "duplicates = data_cleaned.duplicated()\nnum_duplicates = duplicates.sum()\ndata_cleaned = data_cleaned[~duplicates]",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M4",
+        "label": "归一化数值数据",
+        "expected": "data_cleaned[numeric_cols] = scaler.fit_transform(data_cleaned[numeric_cols])",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M5",
+        "label": "设置目标变量",
+        "expected": "target_variable = 'SeriousDlqin2yrs'",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M6a",
+        "label": "定义特征",
+        "expected": "X = data_cleaned.drop(columns=[target_variable])",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M6a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M6b",
+        "label": "定义目标",
+        "expected": "y = data_cleaned[target_variable]",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M6b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M7",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 26,
+        "rubric_id": "2.1.3-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.3-M8",
+        "label": "保存清洗后的数据",
+        "expected": "cleaned_file_path = '2.1.3_cleaned_data.csv'\ndata_cleaned.to_csv(cleaned_file_path, index=False)",
+        "points": 1,
+        "pdf_page": 27,
+        "rubric_id": "2.1.3-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "133b6636d2406433be8613f186a18fd36ae7357c620a41755a0b8de917bc30a7"
+  },
+  {
+    "question_id": "2.1.4",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.1.4-M1a",
+        "label": "读取数据集并指定编码",
+        "expected": "data = pd.read_csv('medical_data.csv', encoding='gbk')",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M1b",
+        "label": "查看表结构基本信息",
+        "expected": "print(data.info())",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M2",
+        "label": "修改列名",
+        "expected": "data.rename(columns={'病人ID': '患者ID'}, inplace=True)",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M3a",
+        "label": "增加诊断延迟和病程列",
+        "expected": "data['诊断延迟'] = (data['诊断日期'] - data['就诊日期']).dt.days\ndata['病程'] = (datetime(2024, 9, 1) - data['诊断日期']).dt.days",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M3a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M3b",
+        "label": "删除不合理数据",
+        "expected": "data = data[(data['诊断延迟'] >= 0) & (data['年龄'] > 0) & (data['年龄'] < 120)]",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M3b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M4",
+        "label": "删除重复值并记录删除行数",
+        "expected": "initial_rows = data.shape[0]\ndata.drop_duplicates(inplace=True)\ndeleted_rows = initial_rows - data.shape[0]",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M5",
+        "label": "归一化指定列",
+        "expected": "columns_to_normalize = ['年龄', '体重', '身高']\ndata[columns_to_normalize] = scaler.fit_transform(data[columns_to_normalize])",
+        "points": 1,
+        "pdf_page": 30,
+        "rubric_id": "2.1.4-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M6",
+        "label": "绘制治疗结果柱状图",
+        "expected": "treatment_outcome_distribution.plot(kind='bar', stacked=True)",
+        "points": 1,
+        "pdf_page": 31,
+        "rubric_id": "2.1.4-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M7",
+        "label": "绘制年龄与疾病严重程度散点图",
+        "expected": "plt.scatter(data['年龄'], data['疾病严重程度'])",
+        "points": 1,
+        "pdf_page": 31,
+        "rubric_id": "2.1.4-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.4-M8",
+        "label": "保存处理后的数据",
+        "expected": "output_path = '2.1.4_cleaned_data.csv'\ndata.to_csv(output_path, index=False)",
+        "points": 1,
+        "pdf_page": 31,
+        "rubric_id": "2.1.4-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "133b6636d2406433be8613f186a18fd36ae7357c620a41755a0b8de917bc30a7"
+  },
+  {
+    "question_id": "2.1.5",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.1.5-M1a",
+        "label": "读取数据集",
+        "expected": "data = pd.read_csv('健康咨询客户数据集.csv')",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M1b",
+        "label": "查看表结构基本信息",
+        "expected": "print(data.info())",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M2",
+        "label": "统计每列缺失值数量",
+        "expected": "print(data.isnull().sum())",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M3",
+        "label": "删除含缺失值的行",
+        "expected": "data_cleaned = data.dropna().copy()",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M4",
+        "label": "将Your age转换为整数并处理异常值",
+        "expected": "data_cleaned.loc[:, 'Your age'] = pd.to_numeric(data_cleaned['Your age'], errors='coerce')\ndata_cleaned = data_cleaned.dropna(subset=['Your age'])\ndata_cleaned = data_cleaned[data_cleaned['Your age'] >= 0]\ndata_cleaned.loc[:, 'Your age'] = data_cleaned['Your age'].astype(int)",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M5",
+        "label": "检查并删除重复值",
+        "expected": "duplicates_removed = data_cleaned.duplicated().sum()\ndata_cleaned = data_cleaned.drop_duplicates()",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M6",
+        "label": "对健身水平列进行编码",
+        "expected": "label_encoder = LabelEncoder()\ndata_cleaned['How do you describe your current level of fitness ?'] = label_encoder.fit_transform(data_cleaned['How do you describe your current level of fitness ?'])",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M7",
+        "label": "绘制健身频率饼图",
+        "expected": "exercise_frequency_counts.plot.pie(autopct='%1.1f%%', startangle=90, colors=plt.cm.Paired.colors)",
+        "points": 1,
+        "pdf_page": 37,
+        "rubric_id": "2.1.5-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M8",
+        "label": "划分训练集和测试集",
+        "expected": "train_data, test_data = train_test_split(data_filled, test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 38,
+        "rubric_id": "2.1.5-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.1.5-M9",
+        "label": "保存处理后的数据",
+        "expected": "cleaned_file_path = '2.1.5_cleaned_data.csv'\ndata_filled.to_csv(cleaned_file_path, index=False)",
+        "points": 1,
+        "pdf_page": 38,
+        "rubric_id": "2.1.5-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "133b6636d2406433be8613f186a18fd36ae7357c620a41755a0b8de917bc30a7"
+  },
+  {
+    "question_id": "2.2.1",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.2.1-M1a",
+        "label": "读取数据集",
+        "expected": "data = pd.read_csv('finance数据集.csv')",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M1b",
+        "label": "显示数据前五行",
+        "expected": "print(data.head())",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M2",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M3",
+        "label": "初始化Logistic回归模型",
+        "expected": "model = LogisticRegression(max_iter=1000)",
+        "points": 2,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M4",
+        "label": "训练Logistic回归模型",
+        "expected": "model.fit(X_train, y_train)",
+        "points": 2,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M5",
+        "label": "保存Logistic回归模型",
+        "expected": "with open('2.2.1_model.pkl', 'wb') as file:\n    pickle.dump(model, file)",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M6",
+        "label": "用测试集预测",
+        "expected": "y_pred = model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M7",
+        "label": "计算模型准确率",
+        "expected": "accuracy = (y_test==y_pred).mean()",
+        "points": 2,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M8a",
+        "label": "初始化SMOTE",
+        "expected": "smote = SMOTE(random_state=42)",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M8a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M8b",
+        "label": "重采样训练集",
+        "expected": "X_resampled, y_resampled = smote.fit_resample(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M8b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M9",
+        "label": "用重采样数据重新训练模型",
+        "expected": "model.fit(X_resampled, y_resampled)",
+        "points": 2,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M10",
+        "label": "生成重采样后的预测结果",
+        "expected": "y_pred_resampled = model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 43,
+        "rubric_id": "2.2.1-M10",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.1-M11",
+        "label": "计算重采样后的准确率",
+        "expected": "accuracy_resampled = (y_test== y_pred_resampled).mean()",
+        "points": 1,
+        "pdf_page": 44,
+        "rubric_id": "2.2.1-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "scoring_notes": [
+      "M8a/M8b两空合计对应原rubric M8组总分2分；原rubric未明确逐空分值，本JSON为组内本地拆分，每空1分。"
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "e7db4650ee3ef69ec527874001c268270b3393042f593d972d59168485234ae3"
+  },
+  {
+    "question_id": "2.2.2",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.2.2-M1a",
+        "label": "读取数据集",
+        "expected": "df = pd.read_csv('auto-mpg.csv')",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M1b",
+        "label": "显示数据前五行",
+        "expected": "print(df.head())",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M2a",
+        "label": "转换horsepower数值类型",
+        "expected": "df['horsepower'] = pd.to_numeric(df['horsepower'], errors='coerce')",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M2a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M2b",
+        "label": "删除缺失值行",
+        "expected": "df = df.dropna()",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M2b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M3a",
+        "label": "定义自变量",
+        "expected": "X = df[['cylinders', 'displacement', 'horsepower', 'weight', 'acceleration', 'model year', 'origin']]",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M3a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M3b",
+        "label": "定义因变量",
+        "expected": "y = df['mpg']",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M3b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M4",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M5",
+        "label": "创建标准化和线性回归管道",
+        "expected": "pipeline = Pipeline([('scaler', StandardScaler()), ('linreg', LinearRegression())])",
+        "points": 2,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M6",
+        "label": "训练线性回归管道",
+        "expected": "pipeline.fit(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M7",
+        "label": "保存训练模型",
+        "expected": "with open('2.2.2_model.pkl', 'wb') as model_file:\n    pickle.dump(pipeline, model_file)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M8",
+        "label": "使用线性回归模型预测",
+        "expected": "y_pred = pipeline.predict(X_test)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M9",
+        "label": "保存线性回归预测结果",
+        "expected": "results_df = pd.DataFrame(y_pred, columns=['预测结果'])\nresults_df.to_csv('2.2.2_results.txt', index=False)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M10",
+        "label": "初始化随机森林回归模型",
+        "expected": "rf_model = RandomForestRegressor(n_estimators=100, random_state=42)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M10",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M11",
+        "label": "训练随机森林回归模型",
+        "expected": "rf_model.fit(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M12",
+        "label": "使用随机森林模型预测",
+        "expected": "y_pred_rf = rf_model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.2-M13",
+        "label": "保存随机森林预测结果",
+        "expected": "results_rf_df = pd.DataFrame(y_pred_rf, columns=['预测结果'])\nresults_rf_df.to_csv('2.2.2_results_rf.txt', index=False)",
+        "points": 1,
+        "pdf_page": 46,
+        "rubric_id": "2.2.2-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "scoring_notes": [
+      "M2a/M2b两空合计对应原rubric M2组总分2分；原rubric未明确逐空分值，本JSON为组内本地拆分，每空1分。"
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "e7db4650ee3ef69ec527874001c268270b3393042f593d972d59168485234ae3"
+  },
+  {
+    "question_id": "2.2.3",
+    "verified": false,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.2.3-M1a",
+        "label": "读取数据集",
+        "expected": "df = pd.read_csv('fitness analysis.csv')",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M1b",
+        "label": "显示数据前五行",
+        "expected": "print(df.head())",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M2a",
+        "label": "将分类变量转换为数值变量",
+        "expected": "X = pd.get_dummies(X)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M2a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M2b",
+        "label": "将年龄段转换为数值变量",
+        "expected": "y = df['Your age'].apply(lambda x: int(x.split(' ')[0]))",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M2b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M3",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M3",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M4",
+        "label": "初始化随机森林回归模型",
+        "expected": "rf_model = RandomForestRegressor(n_estimators=100, random_state=42)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M5",
+        "label": "训练随机森林回归模型",
+        "expected": "rf_model.fit(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M6",
+        "label": "保存随机森林模型",
+        "expected": "with open('2.2.3_model.pkl', 'wb') as model_file:\n    pickle.dump(rf_model,model_file)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M6",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M7",
+        "label": "使用随机森林模型预测",
+        "expected": "y_pred = rf_model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M8",
+        "label": "计算训练集和测试集分数",
+        "expected": "train_score = rf_model.score(X_train,y_train)\ntest_score = rf_model.score(X_test,y_test)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M8",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M9",
+        "label": "计算随机森林均方误差",
+        "expected": "mse = mean_squared_error(y_test,y_pred)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M9",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M10",
+        "label": "计算随机森林决定系数",
+        "expected": "r2 = r2_score(y_test,y_pred)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M10",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M11",
+        "label": "初始化XGBoost回归模型",
+        "expected": "xgb_model = xgb.XGBRegressor(n_estimators=100, random_state=42)",
+        "points": 1,
+        "pdf_page": 49,
+        "rubric_id": "2.2.3-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M12",
+        "label": "训练XGBoost回归模型",
+        "expected": "xgb_model.fit(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 50,
+        "rubric_id": "2.2.3-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M13",
+        "label": "使用XGBoost回归模型预测",
+        "expected": "y_pred_xgb = xgb_model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 50,
+        "rubric_id": "2.2.3-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M14",
+        "label": "计算XGBoost训练集和测试集分数",
+        "expected": "    xgb_report_file.write(f'XGBoost训练集得分: {xgb_model.score(X_train, y_train)}\\n')\n    xgb_report_file.write(f'XGBoost测试集得分: {xgb_model.score(X_test, y_test)}\\n')",
+        "points": 1,
+        "pdf_page": 50,
+        "rubric_id": "2.2.3-M14",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.3-M15",
+        "label": "计算XGBoost均方误差和决定系数",
+        "expected": "    xgb_report_file.write(f'XGBoost均方误差(MSE): {mean_squared_error(y_test,y_pred_xgb)}\\n')\n    xgb_report_file.write(f'XGBoost决定系数(R^2): {r2_score(y_test,y_pred_xgb)}\\n')",
+        "points": 1,
+        "pdf_page": 50,
+        "rubric_id": "2.2.3-M15",
+        "enabled": false,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "e7db4650ee3ef69ec527874001c268270b3393042f593d972d59168485234ae3"
+  },
+  {
+    "question_id": "2.2.4",
+    "verified": false,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.2.4-M1a",
+        "label": "读取数据集",
+        "expected": "data = pd.read_excel('大学生低碳生活行为的影响因素数据集.xlsx')",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M1b",
+        "label": "显示数据前五行",
+        "expected": "print(data.head())",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M2",
+        "label": "删除不必要的列",
+        "expected": "data_cleaned = data.drop(columns=['序号', '所用时间'])",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M3a",
+        "label": "定义自变量",
+        "expected": "X = data_cleaned.drop(columns=[target])",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M3a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M3b",
+        "label": "定义因变量",
+        "expected": "y = data_cleaned[target]",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M3b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M4",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M4",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M5",
+        "label": "初始化线性回归模型",
+        "expected": "model = LinearRegression()",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M6",
+        "label": "训练线性回归模型",
+        "expected": "model.fit(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M7",
+        "label": "保存线性回归模型",
+        "expected": "model_filename = '2.2.4_model.pkl'\njoblib.dump(model, model_filename)",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M8",
+        "label": "使用线性回归模型预测",
+        "expected": "y_pred = model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M9",
+        "label": "保存线性回归预测结果",
+        "expected": "results = pd.DataFrame({'实际值': y_test, '预测值': y_pred})\nresults_filename = '2.2.4_results.txt'\nresults.to_csv(results_filename, index=False, sep='\\t')",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M10a",
+        "label": "计算线性回归均方误差",
+        "expected": "    f.write(f'均方误差: {mean_squared_error(y_test,y_pred)}\\n')",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M10a",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M10b",
+        "label": "计算线性回归决定系数",
+        "expected": "    f.write(f'决定系数: {r2_score(y_test,y_pred)}\\n')",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M10b",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M11",
+        "label": "初始化XGBoost模型",
+        "expected": "xgb_model = XGBRegressor(n_estimators=1000,learning_rate=0.05,max_depth=5, subsample=0.8, colsample_bytree=0.8)",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M11",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M12",
+        "label": "训练XGBoost模型",
+        "expected": "xgb_model.fit(X_train, y_train)",
+        "points": 1,
+        "pdf_page": 54,
+        "rubric_id": "2.2.4-M12",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M13",
+        "label": "使用XGBoost模型预测",
+        "expected": "y_pred_xg = xgb_model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 55,
+        "rubric_id": "2.2.4-M13",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.4-M14",
+        "label": "计算XGBoost均方误差和决定系数",
+        "expected": "    f.write(f'均方误差: {mean_squared_error(y_test,y_pred_xg)}\\n')\n    f.write(f'决定系数: {r2_score(y_test,y_pred_xg)}\\n')",
+        "points": 1,
+        "pdf_page": 55,
+        "rubric_id": "2.2.4-M14",
+        "enabled": false,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "e7db4650ee3ef69ec527874001c268270b3393042f593d972d59168485234ae3"
+  },
+  {
+    "question_id": "2.2.5",
+    "verified": false,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "2.2.5-M1a",
+        "label": "读取数据集",
+        "expected": "df = pd.read_csv('fitness analysis.csv')",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M1a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M1b",
+        "label": "显示数据前五行",
+        "expected": "print(df.head())",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M1b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M2a",
+        "label": "将分类变量转为数值变量",
+        "expected": "X = pd.get_dummies(X)",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M2a",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M2b",
+        "label": "设置目标变量",
+        "expected": "y = df['daily_steps']",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M2b",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M3",
+        "label": "划分训练集和测试集",
+        "expected": "X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2, random_state=42)",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M3",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M4",
+        "label": "初始化决策树模型",
+        "expected": "dt_model = DecisionTreeRegressor(random_state=42)",
+        "points": 2,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M5",
+        "label": "训练决策树模型",
+        "expected": "dt_model.fit(X_train, y_train)",
+        "points": 2,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M6",
+        "label": "保存训练模型",
+        "expected": "with open('2.2.5_model.pkl', 'wb') as model_file:\n    pickle.dump(dt_model,model_file)",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M6",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M7",
+        "label": "在测试集上预测",
+        "expected": "y_pred = dt_model.predict(X_test)",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M8",
+        "label": "保存预测结果",
+        "expected": "results = pd.DataFrame({'实际值': y_test, '预测值': y_pred})\nresults_filename = '2.2.5_results.txt'\nresults.to_csv(results_filename, index=False, sep='\\t')",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M9",
+        "label": "生成模型测试报告",
+        "expected": "report_filename = '2.2.5_report.txt'\nwith open(report_filename, 'w') as f:\n    f.write(f'均方误差: {mean_squared_error(y_test,y_pred)}\\n')\n    f.write(f'平均绝对误差: {mean_absolute_error(y_test,y_pred)}\\n')\n    f.write(f'决定系数: {r2_score(y_test,y_pred)}\\n')",
+        "points": 2,
+        "pdf_page": 58,
+        "scoring_note": "原rubric M9报告生成2分与M10-M12三个指标各1分存在代码内容重叠；按原rubric保留为不同评分目标。",
+        "rubric_id": "2.2.5-M9",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M10",
+        "label": "计算均方误差",
+        "expected": "f.write(f'均方误差: {mean_squared_error(y_test,y_pred)}\\n')",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M10",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M11",
+        "label": "计算平均绝对误差",
+        "expected": "f.write(f'平均绝对误差: {mean_absolute_error(y_test,y_pred)}\\n')",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M11",
+        "enabled": false,
+        "input_mode": "statement"
+      },
+      {
+        "id": "2.2.5-M12",
+        "label": "计算决定系数",
+        "expected": "f.write(f'决定系数: {r2_score(y_test,y_pred)}\\n')",
+        "points": 1,
+        "pdf_page": 58,
+        "rubric_id": "2.2.5-M12",
+        "enabled": false,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "e7db4650ee3ef69ec527874001c268270b3393042f593d972d59168485234ae3"
+  },
+  {
+    "question_id": "3.2.1",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "3.2.1-M1",
+        "label": "加载ONNX模型",
+        "expected": "session = ort.InferenceSession('resnet.onnx')",
+        "points": 2,
+        "pdf_page": 67,
+        "rubric_id": "3.2.1-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.1-M2",
+        "label": "加载图片",
+        "expected": "image = Image.open('img_test.jpg').convert('RGB')",
+        "points": 2,
+        "pdf_page": 67,
+        "rubric_id": "3.2.1-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.1-M3",
+        "label": "预处理图片",
+        "expected": "processed_image = preprocess_image(image)",
+        "points": 2,
+        "pdf_page": 67,
+        "rubric_id": "3.2.1-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.1-M4",
+        "label": "运行模型识别图片",
+        "expected": "output = session.run([output_name], {input_name: processed_image})[0]",
+        "points": 2,
+        "pdf_page": 67,
+        "rubric_id": "3.2.1-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.1-M5",
+        "label": "计算分类概率",
+        "expected": "probabilities = scipy.special.softmax(output, axis=-1)",
+        "points": 2,
+        "pdf_page": 67,
+        "rubric_id": "3.2.1-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.1-M6",
+        "label": "获取最高的五个概率及类别索引",
+        "expected": "top5_idx = np.argsort(probabilities[0])[-5:][::-1]\ntop5_prob = probabilities[0][top5_idx]",
+        "points": 3,
+        "pdf_page": 67,
+        "rubric_id": "3.2.1-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "bda7058215df1ed1384b069880217df8b43dba612a04b4049f37d70ea7bda19c"
+  },
+  {
+    "question_id": "3.2.2",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "3.2.2-M1",
+        "label": "加载ONNX模型",
+        "expected": "ort_session = onnxruntime.InferenceSession('mnist.onnx')",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M2",
+        "label": "加载灰度图像",
+        "expected": "image = Image.open('img_test.png').convert('L')",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M3",
+        "label": "调整图像为MNIST输入尺寸",
+        "expected": "image = image.resize((28, 28))",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M4",
+        "label": "转换为NumPy数组",
+        "expected": "image_array = np.asarray(image, dtype=np.float32)",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M5",
+        "label": "添加batch维度",
+        "expected": "image_array = np.expand_dims(image_array, axis=0)",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M6",
+        "label": "添加通道维度",
+        "expected": "image_array = np.expand_dims(image_array, axis=0)",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M7",
+        "label": "构造模型输入列表",
+        "expected": "ort_inputs = {ort_session.get_inputs()[0].name: image_array}",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M8",
+        "label": "执行模型预测",
+        "expected": "ort_outs = ort_session.run(None, ort_inputs)",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.2-M9",
+        "label": "获取预测类别",
+        "expected": "predicted_class = np.argmax(ort_outs[0])",
+        "points": 2,
+        "pdf_page": 69,
+        "rubric_id": "3.2.2-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "bda7058215df1ed1384b069880217df8b43dba612a04b4049f37d70ea7bda19c"
+  },
+  {
+    "question_id": "3.2.3",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "3.2.3-M1",
+        "label": "定义情感类别与数字标签映射",
+        "expected": "emotion_table = {'neutral':0, 'happiness':1, 'surprise':2,'sadness':3,\n                 'anger':4, 'disgust':5, 'fear':6, 'contempt':7}",
+        "points": 3,
+        "pdf_page": 71,
+        "rubric_id": "3.2.3-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.3-M2",
+        "label": "加载ONNX模型",
+        "expected": "ort_session = ort.InferenceSession('emotion-ferplus.onnx')",
+        "points": 3,
+        "pdf_page": 71,
+        "rubric_id": "3.2.3-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.3-M3",
+        "label": "加载图片并预处理",
+        "expected": "input_data = preprocess('img_test.png')",
+        "points": 3,
+        "pdf_page": 71,
+        "rubric_id": "3.2.3-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.3-M4",
+        "label": "运行模型进行预测",
+        "expected": "ort_outs = ort_session.run(None, ort_inputs)",
+        "points": 3,
+        "pdf_page": 71,
+        "rubric_id": "3.2.3-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.3-M5",
+        "label": "解码模型输出并取得最高概率类别",
+        "expected": "predicted_label = np.argmax(ort_outs[0])",
+        "points": 3,
+        "pdf_page": 71,
+        "rubric_id": "3.2.3-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.3-M6",
+        "label": "由预测标签获取情感名称",
+        "expected": "predicted_emotion = list(emotion_table.keys())[predicted_label]",
+        "points": 3,
+        "pdf_page": 71,
+        "rubric_id": "3.2.3-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "bda7058215df1ed1384b069880217df8b43dba612a04b4049f37d70ea7bda19c"
+  },
+  {
+    "question_id": "3.2.4",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "3.2.4-M1",
+        "label": "加载ONNX模型",
+        "expected": "session = ort.InferenceSession('flower-detection.onnx')",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M2",
+        "label": "加载类别标签",
+        "expected": "with open('labels.txt') as f:\n    labels = [line.strip() for line in f.readlines()]",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M3",
+        "label": "加载图片",
+        "expected": "image = Image.open('flower_test.png').convert('RGB')",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M4",
+        "label": "预处理图片",
+        "expected": "processed_image = preprocess_image(image)",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M5",
+        "label": "运行模型识别",
+        "expected": "output = session.run([output_name], {input_name: processed_image})[0]",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M6",
+        "label": "计算分类概率",
+        "expected": "accuracy = scipy.special.softmax(output, axis=-1)",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M7",
+        "label": "获取预测类别索引",
+        "expected": "predicted_idx =  np.argmax(accuracy)",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M8",
+        "label": "将预测准确值转换为百分比",
+        "expected": "prob_percentage =  accuracy[0,predicted_idx]*100",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.4-M9",
+        "label": "获取预测类别标签",
+        "expected": "predicted_label = labels[predicted_idx]",
+        "points": 2,
+        "pdf_page": 73,
+        "rubric_id": "3.2.4-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "bda7058215df1ed1384b069880217df8b43dba612a04b4049f37d70ea7bda19c"
+  },
+  {
+    "question_id": "3.2.5",
+    "verified": true,
+    "review_method": "visual_pdf",
+    "items": [
+      {
+        "id": "3.2.5-M1",
+        "label": "读取并清理类别标签",
+        "expected": "class_names = [name.strip() for name in open('voc-model-labels.txt').readlines()]",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M1",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M2",
+        "label": "创建ONNX Runtime推理会话",
+        "expected": "ort_session = ort.InferenceSession('version-RFB-320.onnx')",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M2",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M3",
+        "label": "获取模型输入名称",
+        "expected": "input_name = ort_session.get_inputs()[0].name",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M3",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M4",
+        "label": "目录不存在时创建结果目录",
+        "expected": "if not os.path.exists(result_path):\n    os.makedirs(result_path)",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M4",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M5",
+        "label": "使用OpenCV读取图像",
+        "expected": "orig_image = cv2.imread(img_path)",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M5",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M6",
+        "label": "将图像调整为320x240",
+        "expected": "image = cv2.resize(image, (320, 240))",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M6",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M7",
+        "label": "定义图像归一化均值数组",
+        "expected": "image_mean = np.array([127, 127, 127])",
+        "points": 2,
+        "pdf_page": 75,
+        "rubric_id": "3.2.5-M7",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M8",
+        "label": "增加batch维度",
+        "expected": "image = np.expand_dims(image, axis=0)",
+        "points": 1,
+        "pdf_page": 76,
+        "source_points_conflict": {
+          "pdf_annotation": 1,
+          "rubric_allocation": 1,
+          "rubric_description": 2,
+          "applied_points": 1,
+          "note": "PDF代码注释与rubric配分列均为1分，rubric细则描述文字提及2分；按配分列及PDF注释记1分。"
+        },
+        "rubric_id": "3.2.5-M8",
+        "enabled": true,
+        "input_mode": "statement"
+      },
+      {
+        "id": "3.2.5-M9",
+        "label": "运行ONNX模型获取置信度和边界框",
+        "expected": "confidences, boxes = ort_session.run(None, {input_name: image})",
+        "points": 2,
+        "pdf_page": 76,
+        "rubric_id": "3.2.5-M9",
+        "enabled": true,
+        "input_mode": "statement"
+      }
+    ],
+    "compiled": true,
+    "review_limit": "仅enabled条目自动计分；未能确认的源图字符保留人工PDF核对，不使用推断字符串。",
+    "source_sha256": "bda7058215df1ed1384b069880217df8b43dba612a04b4049f37d70ea7bda19c"
+  }
+]

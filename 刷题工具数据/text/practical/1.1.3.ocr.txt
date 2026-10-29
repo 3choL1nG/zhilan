@@ -1,0 +1,105 @@
+【PDF第8页】
+In L1」：
+In ［2］：
+1.1.3
+import pandas as pd
+import numpy as np
+import matplotlib. pyplot as plt
+＃读取数据集
+data = pd.read_csv（'credit_data.csv”）
+# 1.数据完整性审核
+missing_values = data. isnull（）.sum（）
+duplicate_values = data. duplicated（）.sum（）
+#输出结果
+print（”缺失值统计：）
+print （missing_values）
+print（”重复值统计：”）
+print （duplicate_values）
+缺失值统计：
+CustomerID
+Name
+Age
+Income
+LoanAmount
+LoanTerm
+CreditScore
+Default
+TransactionHistory
+atype: int64
+重复值统计：
+0
+0
+0
+0
+#数据缺失值统计 2分
+#数据重复值统计 2分
+1.1.3-1.jpg
+QuadAIT
+2
+Vao
+
+【PDF第9页】
+In ［3」：
+In
+［4」：
+# 2.数据合理性审核
+datal' is_age_valid'］ = datal' Age'］.between （18, 70）
+#Age数据合理性审核
+datal' is_income_valid' ］ = datal' Income'］>2000
+#Income数据的合理性
+datal' is_loan_amount_valid'］ = datal' LoanAmount'］< （data［' Income'］* 5）
+#LoanA
+mount数据的合理性审核 2分
+data［ is_credit_score_valid'］= data［' CreditScore'］.between（300, 850）
+#CreditScore
+数据的合理性审核 2分
+# 合理性检查结果
+validity_checks = data［' is_age_valid'，'is_income_valid'，'is_loan_amount_valid'，
+'is_credit_score_valid' J1. al1 （axis=1）
+data［' is_valid'］= validity_checks
+#输出结果
+print（“数据合理性检查：”）
+print（data［［' is_age_valid'，'is_income_valid'，'is_loan_amount_valid'，'is_credit_sc
+ore_valid'，'is_valid' 11.deseribe （））
+数据合理性检查：
+is_age_valid is_income_valid is_loan_amount_valid
+\
+1000
+count
+unique
+top
+freq
+Irue
+999
+Irue
+999
+True
+796
+1.1.3-2.jpg
+count
+unique
+tOp
+freq
+is_credit_score_valid is_valid
+1000
+1
+True
+1000
+1000
+2
+True
+795
+# 3.数据清洗和异常值处理
+# 标记不合理数据
+invalid_rows = data［^datal' is_valid' ］］
+# 删除不合理数据行
+cleaned_data = dataldatal' is_valid'1］
+# 删除标记列
+cleaned_data = cleaned_data. drop （columns=［' is_age_valid'，'is_income_valid'，'is_loa
+n_amount_valid'，
+'is_credit_score_valid'，'is_valid'1）
+cLeaned data. to_csvC'cleaned credit_data.csV'，index=Palse）
+print（“数据清洗完成，已保存为
+'cleaned_credit_data.csv' "）
+数据清洗完成，己保存为'cleaned_credit_data.Csv°
+6

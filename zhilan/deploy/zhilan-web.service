@@ -1,0 +1,22 @@
+[Unit]
+Description=Zhilan examination practice website
+After=network.target zhilan-runtime.service
+Wants=zhilan-runtime.service
+[Service]
+Type=simple
+User=zhilan
+Group=zhilan
+WorkingDirectory=/srv/zhilan/current
+EnvironmentFile=/etc/zhilan/web.env
+ExecStart=/usr/local/bin/node /srv/zhilan/current/src/server.mjs
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/zhilan
+[Install]
+WantedBy=multi-user.target

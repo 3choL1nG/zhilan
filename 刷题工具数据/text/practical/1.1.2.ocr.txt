@@ -1,0 +1,87 @@
+【PDF第6页】
+In L1」：
+In
+［2」：
+1.1.2
+import pandas as pd
+import numpy as np
+import matplotlib. pyplot as plt
+# 读取数据集2分
+data = pd. read_csv（' sensor_data. csv'）
+# 1. 传感器数据统计
+# 对传感器类型进行分组，并计算每个组的数据数量和平均值 3分
+sensor_stats = data. groupby（' SensorType'）［' Value'］.agg（［' count'，‘mean”］）
+# 输出结果
+print（”传感器数据数量和平均值：”）
+print （sensor_stats）
+传感器数据数量和平均值：
+count
+mean
+Sensorlype
+Humidity
+Light
+SoilMoisture
+SoilPH
+Temperature
+2065 48.978302
+1950 49.439011
+1951
+49.325119
+2029
+49.865460
+2005
+49.847153
+1.1.2-1.jpg
+# 2.按位置统计温度和湿度数据
+# 筛选出温度和湿度数据，然后按位置和传感器类型分组，计算每个组平均值 2分
+Location_stats = data［datal' SensorType'］、isinCI Temperature'，'Humidity' ］）］. groupby
+（『' Location'，
+'SensorType'］）［' Value' ］.meanO.unstackO）
+＃输出结果
+print（“每个位置的温度和湿度数据平均值：
+print （location_stats）
+每个位置的温度和湿度数据平均值：
+SensorType
+Humidity
+Temperature
+Location
+Field1
+Field2
+Field3
+Field4
+49.036008
+47.379411
+49.583266
+49.955498
+50.482617
+49.874282
+48.761804
+50.241608
+1.1.2-2.Jpg
+
+【PDF第7页】
+In ［4」：
+# 3.数据清洗和异常值处理
+# 标记异常值 3分
+data［'is_abnormal'］= np. where（
+（datal' SensorType"
+］=='Temperature'）&（（data［' Value'］〈-10）|（datal' Value'］
+＞ 50）））
+（（data［’ SensorType'］ == 'Humidity'）& （（data［' Value'］<0）｜（data［' Value'］> 10
+0））），
+True, False
+）
+# 输出异常值数量2分
+print（“异常值数量：”
+，data［' is_abnormal'1.sum（））
+＃ 填补缺失值
+#使用前向填充和后向填充的方法填补缺失值4分
+data［' Value' ］. fillna （method=' ffill, inplace=True）
+data［' Value' ］. fillna （method='bfil1'，inplace=True）
+# 保存清洗后数据
+# 删除用于标记异常值的列，并将清洗后的数据保存到新的CSV文件中 4分
+cleaned_data = data. drop （columns=［' is_abnormal'1）
+cleaned_data. to_csv（'cleaned_sensor_data. csv'，index=False）
+print（“数据清洗完成，己保存为'cleaned_sensor_data.csv" ）
+异常值数量：1011
+数据清洗完成，已保存为'cleaned_sensor_data. csv'

@@ -1,0 +1,135 @@
+{
+  "level": 3,
+  "source_id": "exam_notes",
+  "theory": {
+    "duration_minutes": 90,
+    "total_score": 100,
+    "question_counts": {
+      "j": 40,
+      "s": 140,
+      "m": 10
+    },
+    "points_per_question": {
+      "j": 0.5,
+      "s": 0.5,
+      "m": 1
+    },
+    "answer_source_id": "theory_answer_excel",
+    "requested_future_simulation": {
+      "original_question_ratio": 0.7,
+      "generated_question_ratio": 0.3,
+      "status": "requested_plan_only_no_generated_questions_yet"
+    }
+  },
+  "practical": {
+    "duration_minutes": 120,
+    "total_score": 100,
+    "answer_source_id": "practical_answer_pdf",
+    "question_origin": "original_bank_only_per_exam_notes",
+    "groups": [
+      {
+        "name": "业务流程设计或业务模块效果优化",
+        "sections": [
+          "1.1",
+          "1.2"
+        ],
+        "question_count": 1,
+        "points": 25,
+        "candidate_ids": [
+          "1.1.1",
+          "1.1.2",
+          "1.1.3",
+          "1.1.4",
+          "1.1.5",
+          "1.2.1",
+          "1.2.2",
+          "1.2.3",
+          "1.2.4",
+          "1.2.5"
+        ]
+      },
+      {
+        "name": "数据处理规范制定",
+        "sections": [
+          "2.1"
+        ],
+        "question_count": 1,
+        "points": 15,
+        "candidate_ids": [
+          "2.1.1",
+          "2.1.2",
+          "2.1.3",
+          "2.1.4",
+          "2.1.5"
+        ]
+      },
+      {
+        "name": "算法测试",
+        "sections": [
+          "2.2"
+        ],
+        "question_count": 1,
+        "points": 20,
+        "candidate_ids": [
+          "2.2.1",
+          "2.2.2",
+          "2.2.3",
+          "2.2.4",
+          "2.2.5"
+        ]
+      },
+      {
+        "name": "智能系统监控和优化",
+        "sections": [
+          "3.1"
+        ],
+        "question_count": 1,
+        "points": 15,
+        "candidate_ids": [
+          "3.1.1",
+          "3.1.2",
+          "3.1.3",
+          "3.1.4",
+          "3.1.5"
+        ]
+      },
+      {
+        "name": "人机交互流程设计",
+        "sections": [
+          "3.2"
+        ],
+        "question_count": 1,
+        "points": 20,
+        "candidate_ids": [
+          "3.2.1",
+          "3.2.2",
+          "3.2.3",
+          "3.2.4",
+          "3.2.5"
+        ]
+      },
+      {
+        "name": "培训指导",
+        "sections": [
+          "4.1",
+          "4.2"
+        ],
+        "question_count": 1,
+        "points": 5,
+        "candidate_ids": [
+          "4.1.1",
+          "4.1.2",
+          "4.1.3",
+          "4.1.4",
+          "4.1.5",
+          "4.2.1",
+          "4.2.2",
+          "4.2.3",
+          "4.2.4",
+          "4.2.5"
+        ]
+      }
+    ]
+  },
+  "note": "考题说明提到分布后续可能变化；本包保存用户目前材料，不推断实际阅卷接受哪些等价写法。"
+}

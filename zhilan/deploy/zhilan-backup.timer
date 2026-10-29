@@ -1,0 +1,8 @@
+[Unit]
+Description=Daily Zhilan learning-record backup
+[Timer]
+OnCalendar=*-*-* 04:25:00
+Persistent=true
+RandomizedDelaySec=300
+[Install]
+WantedBy=timers.target

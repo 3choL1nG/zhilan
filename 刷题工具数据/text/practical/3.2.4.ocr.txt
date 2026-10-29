@@ -1,0 +1,83 @@
+【PDF第73页】
+In ［1］：
+3.2.4
+import onnxruntime as ort
+import numpy as np
+import scipy.special
+from PIL import Image
+# 预处理图像
+def preprocess_image（image, resize_Size=256, crop_Size=224, mean=［0.485, 0.456, 0.406］， std=［0.229, 0.224,0.225］）：
+image = image.resize（（resize_size, resize_size），Image.BILINEAR）
+w,h = image.size
+left=（W - crop_size）/2
+top=（h -crop_size）/2
+image = image.crop（（left, top, left + crop_size, top + crop_Size））
+image= np.array（image）.astype（np.float32）
+image = image/255.0
+image = （image - mean）／ std
+Image= np.transpose（image，（2,0,1））
+image = image.reshape（（1，）+ image.shape）
+return image
+＃加载模型
+2分
+session= ont.Inferencesession（'flower-detection.onnx'）
+# 加载类别标签 2分
+with open（'1abels.txt'2 as f：
+1abels= ［line.strip（）for line in f.readlines（）］
+# 获取模型输入和输出名称
+input_name=
+session.get_inputs（）［e］.name
+output_name
+session.get_outputs（）［e］.name
+# 加载图片2分
+image = Image.open（'flower_test.png'）.convert（'RGB'）
+uaoA
+# 预处理图片
+2分
+processed_image = preprocess_image（image）
+#确保输入数据是 fLoat32 类型
+processed_image = processed_image.astype（np.float32）
+# 进行图片识别
+2分
+output= session.run（［output_name］，｛input_name： processed_image｝）［e］
+#应用 softmax 函数获取识别分类后准确率 2分
+accuracy= scipy.special.softmax（output, axis=-1）
+# 获取预测类别索引
+predicted_idx=
+np.argmax（accuracy）
+#获取预测准确值（转换为百分比）
+prob_percentage=
+accuracy［o,predicted_iax］*100
+# 获取预测钓类别标签
+predicted_label= labels［predicted_idx］
+# 输出预测结果，包含百分比形式的概率
+print（f"Predicted class： ｛predicted_Iabe1｝， Accuracy：｛prob_percentage：.2f｝%"）
+Predicted class: daisy, Accuracy: 96.41%
+3.2.4-1.jpg
+In［ 」：
+10
+
+【PDF第74页】
+3.2.4.docx
+3.2.4
+请勿修改答题卷，在指定单元格内填写答案
+人机交互的最优方式（答对3条以上正确得1分）
+1. 界面设计：设计一个用户友好的界面，包括一个明显的图片上传按钮和一个
+结果展示区域。
+2. 模型和标签加载：在系统启动时预加载"flower-detection. onnx"模型和
+“|abels.txt”类别标签。
+3. 图像上传：用户通过界面上传花朵图片"flower_test.png”。
+4.图像预处理：系统自动对上传的图片进行预处理，如调整大小、裁剪、归一
+化等，以适应模型输入要求。
+5.花朵识别：系统使用“flower-detection.onnx”模型对预处理后的图片进行
+花朵识别。
+6.结果展示：在界面上清晰展示识别结果，包括花朵的预测类型和识别的准确
+7.反馈机制：允许用户提供反馈，如“正确“或“错误”，以持续改进模型性能。
+8.教育性互动：对于识别结果，提供关于花朵额外信息，如花名、生长习性
+等，增加用户参与度。
+9.性能优化：确保系统响应迅速，提供即时的识别反馈。
+10.隐私保护：确保用户上传的图像数据安全，不被未授权访问或存储。
+11.多语言支持：提供多语言界面，以适应不同地区用户的需求。
+12.可访问性设计：确保UI符合可访问性标准，使所有用户包括残障人士都能
+使用。
+11

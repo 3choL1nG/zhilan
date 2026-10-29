@@ -1,0 +1,226 @@
+【PDF第54页】
+In L1」：
+2.2.4
+import pandas as pd
+from sklearn. model_selection import train_test_split
+from sklearn. linear_model import LinearRegression
+from sklearn. metrics import mean_squared_error, r2_score
+import joblib
+from xgboost import XGBRegressor
+＃加载数据集
+data = pd. read_excel（”大学生低碳生活行为影响因素数据集.x1sx'）
+# 显示数据集前五行
+print （data. head（））
+# 删除不必要列并处理分类变量
+cata_cleaned = data. drop（columns=［序号，”所用时间’］）# 删除不必要列
+data CLeaned = pa. get_dummies （data_cleaned, drop_first=True） # 将分类变量转换为哑变
+量/指示变量
+# 定义目标变量和特征
+target=’5.您进行过绿色低碳相关生活方式吗？’ ＃ 确保这是目标变量
+# 定义自变量和因变量
+X= data_Cleaned. drop （columns=［target］）
+y = data_cleaned Ltarget.
+# 将数据拆分为训练集和测试集（测试集占20%）
+X_train, X_test, y_train, y_test = train_test_split （X, y, test_size=0.2, random_state=
+42）
+＃ 初始化线性回归模型
+model = LinearRegression（）
+# 训练线性回归模型
+model.fit（X_train, y_train）
+# 保存训练好模型
+model_filename = '2.2. 4_model. pkI'
+joblib. dump （model, model_filename）
+＃ 进行预测
+y_pred = model.predict （X_test）
+# 将结果保存到文本文件中
+results = pd.DataFrame（［'实际值’：y_test，’预测值’：y_pred｝）
+results_filename='2.2.4_results. txt'
+results. to_csv（results_filename，
+index=False, sep='\t'）# 使用制表符分隔值保存到文
+# 将测试结果保存到报告文件中
+report_filename = '2.2. 4_report. txt'
+with open （report_filename，
+'w'） as f：
+f. write（f”均方误差：
+｛mean_squared_error （y_test, y_pred）｝\n'）
+f. write（f' 决定系数：
+（r2_score （y_test, y_pred）/\n'）
+# 分析并纠正错误（示例：使用XGBoost）
+# 初始化XGBoost模型（设定树钓数量为1000，学习率为0.05，每棵树的最大深度为5，）
+xgb_model = XGBRegressor （n_estimators=1000, learning_rate=0.05, max_depth=5, subsample
+=0.8， colsample_bytree=0.8）
+＃ 训练XGBoost模型
+xgb_model.fit （X_train, y_train）
+51
+
+【PDF第55页】
+# 使用XGBoost模型进行预测
+y_prea_xg = xgb_model.predict （X_test）
+# 将XGBoost结果保存到文本文件中
+results_xg_filename = '2.2.4_results_xg. txt'
+results_xg = pd.DataFrame（“'实际值’：y_test，’预测值’：y_pred_xg｝）
+results_xg. to_csv （results_xg_filename, index=False,sep='\t'）# 使用制表符分隔值保
+存到文本文件
+#将XGBoost测试结果保存到报告文件中
+report_filename_xgb = '2.2.4_report_xgb. txt'
+with open （report_filename_xgb，
+，w'） as f：
+f. write（f'均方误差：｛mean_squared_error （y_test, y_pred_xg）｝＼n'）
+f. write（f' 决定系数：
+（r2_score（y_test, y_pred_xg）：\n'）
+Made by QuadAIT
+
+【PDF第56页】
+InL」：
+序号 所用时间 1.您性别•男性
+•女性 2.您的年级O大一
+•天二 •大三
+•大四
+\
+0
+1
+130秒
+1
+2
+82秒
+2
+3
+230秒
+3
+4
+96秒
+4
+6
+157秒
+1
+1
+1
+1
+3. 您的生源地O农村
+•城镇（乡镇）
+0
+4
+•地县级城市
+2
+3
+3
+2
+1
+•省会城市及直辖市\
+4. 您月生活费O≤1,000元
+01,001-2,000元
+02,001-3,000元
+2
+•=3,001元\
+0
+1
+4
+2
+5.您进行过绿色低碳的相关生活方式吗？
+7.低碳生活是否会成为未来的主流生活万式？
+0
+1
+6. 您觉得“低碳”，与你生活关系密切吗？
+1
+2
+2
+2
+2
+1
+8.您是否认为低碳生活会提高您的生活质量？
+识进行低碳生活 14.我打算以后…—减少使用一次性产品
+0
+1
+2
+5
+2
+5
+3
+3
+2
+2
+2
+5
+我有机会执行低碳生活
+\
+5
+4
+3
+2
+4
+我有足够知
+4
+4
+4
+生活
+0
+1
+2
+3
+合理处理生活中的废弃物
+在日常生活中会进行垃圾分类
+15.日常生活中，我会….…….一对垃圾进行分类
+4
+3
+尽可能劝说周围的人进行低碳
+5
+5
+0
+1
+2
+3
+4
+重复利用废旧物品
+4
+3
+4
+2
+5
+避免便用一次性产品
+4
+4
+3
+2
+4
+3
+4
+3
+2
+3
+劝说周围的人进行低碳生活
+［5 rows x 40 columns」
+53
+
+【PDF第57页】
+2.2.4.d0cx
+2.2.4
+请勿修改答题卷，在指定单元格内填写答案
+针对线性回归模型（以下三题各1分）
+1、模型性能（答案在 report.txt 文件中）
+均方误差（MSE）
+0.024679563713426132
+决定系数（R2）
+0.18477828249843997
+2、错误分析
+1.模型适用性：线性回归模型假设特征与目标变量之间存在线性关系。如果这
+种假设不成立，模型可能会表现不佳。
+2.欠拟合：R‘值接近于零，表明模型可能欠拟合，即模型未能很好地捕捉到数
+据中的模式。这也可能是因为特征的选择不够充分或者特征之间的关系不是线
+性的。
+3. 特征选择：当前模型仅使用了部分特征，并且这些特征可能未能充分描述目
+标变量 “5，您进行过绿色低碳的相关生活方式吗？”的变化情况。
+4. 数据质量和数量：数据可能存在质量问题，如异常值、缺失值等，或者数据
+量不足，无法提供足够的信息来训练一个有效的模型。
+3、改进建议
+1. 特征工程：
+增加特征：重新审视数据集，添加更多可能影响目标变量的因素作为特征
+特征选择：使用特征选择技术（如递归特征消除 RFE、基于模型特征重要性
+等）来识别最相关的特征
+持征构造：创建新的特征，如交互项、多项式特征等，以捕捉更复杂的非线性
+关系。
+2.模型选择与调参：
+尝试其他模型：线性回归假设特征与目标之间存在线性关系。如果这种关系不
+存在，可以尝试其他非线性模型，如决策树、随机森林、支持向量机（SVM）等。
+调整模型参数：通过网格搜索或随机搜索调整模型钓超参数，找到最优参数组
+合。
+54
