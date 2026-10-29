@@ -100,3 +100,14 @@ test('runtime transport failures give actionable messages without exposing inter
  process.env.RUNTIME_SOCKET=path.join(process.env.DATA_DIR,'internal-runtime-not-running.sock');
  try{await assert.rejects(runtime('status','00000000-0000-4000-8000-000000000001'),e=>e.status===503&&/稍后重试/.test(e.message)&&!e.message.includes('sock')&&!e.message.includes(process.env.DATA_DIR))}finally{if(old===undefined)delete process.env.RUNTIME_SOCKET;else process.env.RUNTIME_SOCKET=old}
 });
+
+test('first-login users can sign out without changing their password and cannot bypass the gate',async()=>{
+ createUser('password_gate','Initial!12345');
+ const first=await fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'password_gate',password:'Initial!12345'})});
+ const data=await first.json(),cookie=first.headers.get('set-cookie').split(';')[0];assert.equal(data.user.mustChange,true);
+ const headers={Cookie:cookie,'Content-Type':'application/json','x-csrf-token':data.csrf};
+ assert.equal((await fetch(base+'/api/meta',{headers})).status,403);
+ const out=await fetch(base+'/api/auth/logout',{method:'POST',headers,body:'{}'});assert.equal(out.status,200);assert.match(out.headers.get('set-cookie'),/Max-Age=0/);
+ assert.equal((await fetch(base+'/api/auth/me',{headers})).status,401);
+ const again=await fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'password_gate',password:'Initial!12345'})});assert.equal((await again.json()).user.mustChange,true);
+});
