@@ -136,3 +136,12 @@ test('daily refresh at server midnight resets only daily progress and rejects ol
   assert.equal((await u.call('/api/theory/session','POST',{context:'regular'})).data.index,7);
  }finally{t.mock.restoreAll()}
 });
+
+test('notebook blank positions roundtrip with exact code and cannot bypass validation',async()=>{
+ const u=await account('notebook_fields'),a=(await u.call('/api/practice','POST',{id:'1.1.1'})).data;
+ const text="data = pd.read_csv('sensor_data.csv')\n",notebookBlanks=[[{id:0,from:7,to:text.length-1}]];
+ assert.equal((await u.call('/api/attempts/'+a.id,'PATCH',{answers:{'1.1.1':{notebook:[text],notebookBlanks}}})).status,200);
+ const saved=(await u.call('/api/attempts/'+a.id)).data.answers['1.1.1'];assert.equal(saved.notebook[0],text);assert.deepEqual(saved.notebookBlanks,notebookBlanks);assert.deepEqual(saved.code,{});
+ assert.equal((await u.call('/api/attempts/'+a.id,'PATCH',{answers:{'1.1.1':{notebook:[text],notebookBlanks:[[{id:0,from:7,to:99999}]]}}})).status,400);
+ assert.equal((await u.call('/api/attempts/'+a.id)).data.answers['1.1.1'].notebook[0],text);
+});

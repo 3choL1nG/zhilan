@@ -9,3 +9,14 @@
 
 /* Long answers scroll inside the body; the return control never scrolls away. */
 #dialog{padding:0;overflow:hidden;max-height:88dvh}#dialog[open]{display:flex;flex-direction:column}.dialog-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:0 0 auto;padding:14px 24px;border-bottom:1px solid var(--line);background:var(--paper);color:var(--sub);font-size:13px}.dialog-toolbar .btn{min-height:44px;white-space:nowrap;color:var(--primary)}#dialog-content{padding:24px 28px;overflow:auto;min-height:0;overscroll-behavior:contain;scrollbar-gutter:stable}#dialog-content .answer-page{max-width:100%}@media(max-width:760px){#dialog{max-height:92dvh;width:calc(100% - 20px)}.dialog-toolbar{padding:10px 14px}#dialog-content{padding:18px 14px}.dialog-toolbar .btn{font-size:13px}}
+/* Notebook空位导航仅装饰代码，保存/导出仍为完整可编辑文本。 */
+.notebook-blank-nav{margin:16px;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:9px}
+.notebook-blank-nav[hidden],.cell-blank-tools[hidden]{display:none}
+.notebook-blank-nav strong{font-size:14px}.notebook-blank-nav p{font-size:12px;color:var(--sub);margin-top:4px}
+.notebook-blank-nav>div:last-child,.cell-blank-tools>div{display:flex;gap:8px;flex-shrink:0}
+.cell-blank-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 12px;border-top:1px solid var(--line);background:var(--paper);font-size:12px;color:var(--sub)}
+.cell-blank-tools .textbtn{font-size:12px;padding:8px 4px}
+.notebook-blank{display:inline-block;padding:3px 10px;border:1px dashed #a7c6ff;border-radius:5px;background:#2e4770;color:#e6f0ff;font:12px/24px system-ui,sans-serif;cursor:text;vertical-align:baseline;white-space:nowrap}
+.notebook-blank:hover{background:#3a5989;border-style:solid}.notebook-blank:focus-visible{outline:2px solid #c4ddff;outline-offset:2px}
+.cm-notebook-field{border-bottom:1px dotted #9eb9e7}
+@media(max-width:760px){.notebook-blank-nav{margin:12px;flex-wrap:wrap;padding:12px}.notebook-blank-nav>div:last-child{width:100%}.notebook-blank-nav .btn{flex:1}.notebook-blank-nav p{font-size:11px}.cell-toolbar{gap:8px}.cell-toolbar>span{font-size:13px}.notebook-blank{padding:4px 10px}}

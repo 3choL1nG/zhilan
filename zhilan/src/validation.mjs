@@ -4,6 +4,10 @@ export function practicalAnswer(v){
  if(v.code!==undefined){if(!v.code||typeof v.code!=='object'||Array.isArray(v.code))error();const entries=Object.entries(v.code);if(entries.length>300)error();for(const [k,t]of entries){if(k.length>100||typeof t!=='string'||t.length>20000)error();out.code[k]=t}}
  if(v.text!==undefined){if(typeof v.text!=='string'||v.text.length>60000)error();out.text=v.text}
  if(v.notebook!==undefined){if(!Array.isArray(v.notebook)||v.notebook.length>100||v.notebook.some(t=>typeof t!=='string'||t.length>200000))error();out.notebook=v.notebook}
+ if(v.notebookBlanks!==undefined){
+  if(!Array.isArray(v.notebookBlanks)||v.notebookBlanks.length>out.notebook.length)error();
+  out.notebookBlanks=v.notebookBlanks.map((cell,index)=>{if(!Array.isArray(cell)||cell.length>300)error();const ids=new Set();return cell.map(f=>{if(!f||!Number.isInteger(f.id)||f.id<0||f.id>=300||ids.has(f.id)||!Number.isInteger(f.from)||!Number.isInteger(f.to)||f.from<0||f.to<f.from||f.to>out.notebook[index].length)error();ids.add(f.id);return {id:f.id,from:f.from,to:f.to}})});
+ }
  if(v.document){const d=v.document;if(!Array.isArray(d.paragraphs)||d.paragraphs.length>500||!Array.isArray(d.tables)||d.tables.length>20)error();const paragraphs=d.paragraphs.map(p=>{if(!p||!Number.isInteger(p.index)||p.index<0||p.index>500||typeof p.text!=='string'||p.text.length>20000)error();return {index:p.index,text:p.text}});const tables=d.tables.map(t=>{if(!Array.isArray(t)||t.length>200)error();return t.map(r=>{if(!Array.isArray(r)||r.length>50||r.some(c=>typeof c!=='string'||c.length>10000))error();return r})});if(d.template!==null&&(typeof d.template!=='string'||!/^([^/\\]{1,150})\.docx$/i.test(d.template)))error();out.document={template:d.template,paragraphs,tables}}
  if(JSON.stringify(out).length>150000)error();return out
 }
