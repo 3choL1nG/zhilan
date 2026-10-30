@@ -399,3 +399,29 @@ html{scroll-padding-bottom:110px}.top-account{width:44px;height:44px;border:1px 
  .practice-filters>label{min-width:0}
  .practice-filters>.btn{margin:0}
 }
+
+/* 考试倒计时：与已确认的学习概览蓝色卡片保持一致。 */
+.ribbon-with-countdown{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);padding:30px 32px;gap:28px}
+.ribbon-with-countdown:before{background:linear-gradient(110deg,#244cba,#2863cd)}
+.ribbon-with-countdown>div:first-child{align-self:center}
+.ribbon-with-countdown h2{font-size:28px;letter-spacing:-.6px}
+.ribbon-with-countdown .exam-countdown{display:block;padding:0 0 0 30px;border-left:1px solid #ffffff2e;min-width:0}
+.exam-countdown-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.exam-eyebrow{font-size:13px;line-height:1.6;font-weight:550;color:#d8e5ff;letter-spacing:.5px}
+.exam-calendar{width:34px;height:34px;display:grid;place-items:center;color:#e5edff;background:#ffffff12;border:1px solid #ffffff26;border-radius:9px}
+.exam-calendar svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.exam-count-label{margin-top:14px;font-size:16px;line-height:1.6;color:#ecf2ff}
+.exam-count-value{display:flex;align-items:baseline;gap:12px;margin-top:-4px}
+.exam-days{font-size:76px;line-height:1.18;font-weight:650;letter-spacing:-3px;font-variant-numeric:tabular-nums}
+.exam-day-unit{font-size:18px;font-weight:500;color:#edf3ff}
+.exam-date-line{font-size:13px;line-height:1.6;color:#d7e4ff;display:flex;align-items:center;gap:8px;margin-top:7px}
+.exam-date-dot{width:3px;height:3px;background:#b4c9fc;border-radius:50%}
+.exam-date-dot[hidden]{display:none}
+.exam-session-tabs{display:flex;gap:8px;margin-top:20px}
+.exam-countdown .exam-session-tab{text-align:center;flex:1;min-height:44px;padding:9px 8px;border:1px solid #ffffff40;border-radius:8px;color:#edf3ff;background:#ffffff08;font-size:13px;white-space:nowrap;font-weight:400}
+.exam-countdown .exam-session-tab[aria-pressed=true]{background:#fff;border-color:#fff;color:#244db7;font-weight:650;box-shadow:0 2px 8px #102b7d14}
+.exam-countdown .exam-session-tab:hover:not([aria-pressed=true]):not(:disabled){background:#ffffff18}
+.exam-countdown .exam-session-tab:focus-visible{outline-color:#d3e9ff}
+.exam-nearest:not(:empty){font-size:11px;margin-left:6px;opacity:.75}
+@media(max-width:1000px){.ribbon-with-countdown{grid-template-columns:1fr;gap:24px}.ribbon-with-countdown .exam-countdown{padding:24px 0 0;border-left:0;border-top:1px solid #ffffff36}}
+@media(max-width:760px){.ribbon-with-countdown{padding:24px}.ribbon-with-countdown h2{font-size:23px}.exam-count-label{margin-top:12px}.exam-days{font-size:72px}.exam-session-tabs{margin-top:18px}}
