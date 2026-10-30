@@ -33,13 +33,9 @@ test('daily practice persists the same 50 questions, prioritizes wrong originals
  assert.deepEqual(again.questions.map(q=>q.id),first.questions.map(q=>q.id));assert.equal(again.index,1);assert.equal(again.completed,1);
  assert.equal((await u.call('/api/theory/session','POST',{context:'daily',restart:true})).status,409);
  assert.equal((await other.call('/api/theory/session','PATCH',{context:'daily',id:first.id,index:2})).status,409);
- // Moving a saved batch to yesterday must not discard an unfinished batch.
- const row=db.prepare('SELECT state FROM theory_sessions WHERE user_id=? AND context=?').get(u.id,'daily');const old=JSON.parse(row.state);old.created-=86400000;
- db.prepare('UPDATE theory_sessions SET state=? WHERE user_id=? AND context=?').run(JSON.stringify(old),u.id,'daily');
- assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.id,first.id);
  for(const q of again.questions.slice(1)){const full=theory.find(v=>v.id===q.id);assert.equal((await u.call('/api/theory/submit','POST',{...payload,id:q.id,answer:full.type==='m'?full.answer.split(''):full.answer})).status,200)}
  assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.completed,50);
- assert.notEqual((await u.call('/api/theory/session','POST',{context:'daily',restart:true})).data.id,first.id);
+ assert.equal((await u.call('/api/theory/session','POST',{context:'daily',restart:true})).status,409);
 });
 
 test('theory practice restores selections and position, with stable wrong-review navigation',async()=>{
@@ -72,7 +68,7 @@ test('existing learners continue after their last submitted original question on
 
 test('daily pool contains only wrong originals when more than 50 are available',async()=>{
  const {theory}=await import('../src/bank.mjs'),u=await account('daily_priority');
- const ids=theory.slice(0,70).map(q=>q.id);for(const id of ids)await u.call('/api/progress','PATCH',{id,wrong:true});
+ const ids=['j','s','m'].flatMap(type=>theory.filter(q=>q.type===type).slice(0,30).map(q=>q.id));for(const id of ids)await u.call('/api/progress','PATCH',{id,wrong:true});
  const daily=(await u.call('/api/theory/session','POST',{context:'daily'})).data;
  assert.equal(daily.questions.length,50);assert(daily.questions.every(q=>ids.includes(q.id)));
  const answer=daily.questions[0].type==='m'?['Z']:'Z';
@@ -110,4 +106,33 @@ test('first-login users can sign out without changing their password and cannot 
  const out=await fetch(base+'/api/auth/logout',{method:'POST',headers,body:'{}'});assert.equal(out.status,200);assert.match(out.headers.get('set-cookie'),/Max-Age=0/);
  assert.equal((await fetch(base+'/api/auth/me',{headers})).status,401);
  const again=await fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'password_gate',password:'Initial!12345'})});assert.equal((await again.json()).user.mustChange,true);
+});
+
+test('daily refresh at server midnight resets only daily progress and rejects old submissions',async t=>{
+ const {theory}=await import('../src/bank.mjs'),u=await account('midnight_user');
+ const boundary=Date.parse('2026-10-30T16:00:00Z');let clock=boundary-1000;
+ t.mock.method(Date,'now',()=>clock);
+ try{
+  // New login expiry must be based on the mocked server clock too.
+  db.prepare('UPDATE sessions SET expires=? WHERE user_id=?').run(boundary+86400000,u.id);
+  const original=(await u.call('/api/theory/session','POST',{context:'regular',type:'s'})).data;
+  await u.call('/api/theory/session','PATCH',{context:'regular',id:original.id,index:7});
+  const a=(await u.call('/api/theory/session','POST',{context:'daily'})).data;
+  assert.equal(a.dailyDay,'2026-10-30');assert.equal(a.resetsAt,boundary);
+  assert.deepEqual(Object.fromEntries(['j','s','m'].map(type=>[type,a.questions.filter(q=>q.type===type).length])),{j:20,s:20,m:10});
+  const q=theory.find(q=>q.id===a.questions[0].id),answer=q.type==='m'?q.answer.split(''):q.answer;
+  assert.equal((await u.call('/api/theory/submit','POST',{context:'daily',sessionId:a.id,id:q.id,answer})).status,200);
+  clock=boundary-1;assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.id,a.id);
+  const count=db.prepare('SELECT COUNT(*) n FROM attempts WHERE user_id=?').get(u.id).n;
+  clock=boundary;
+  assert.equal((await u.call('/api/meta')).data.practice.daily.completed,0);
+  assert.equal((await u.call('/api/theory/submit','POST',{context:'daily',sessionId:a.id,id:q.id,answer})).status,409);
+  assert.equal((await u.call('/api/theory/session','PATCH',{context:'daily',id:a.id,index:2})).status,409);
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM attempts WHERE user_id=?').get(u.id).n,count);
+  const b=(await u.call('/api/theory/session','POST',{context:'daily'})).data;
+  assert.notEqual(b.id,a.id);assert.equal(b.completed,0);assert.equal(b.index,0);assert.equal(b.dailyDay,'2026-10-31');
+  assert.deepEqual(Object.fromEntries(['j','s','m'].map(type=>[type,b.questions.filter(q=>q.type===type).length])),{j:20,s:20,m:10});
+  assert.equal((await u.call('/api/theory/session','POST',{context:'daily'})).data.id,b.id);
+  assert.equal((await u.call('/api/theory/session','POST',{context:'regular'})).data.index,7);
+ }finally{t.mock.restoreAll()}
 });

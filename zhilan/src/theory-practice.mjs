@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import {db,now,transaction} from './db.mjs';
 import {theory,theoryMap,learningTheoryMap,safeTheory,sample,theoryAnswer,bankVersion} from './bank.mjs';
+import {dailyWindow,DAILY_COUNTS} from './daily-policy.mjs';
 import {updateProgress} from './attempts.mjs';
 
 const fail=(message,status=400)=>{throw Object.assign(Error(message),{status})};
@@ -11,34 +12,40 @@ function read(uid,context,id){
  const row=getRow(uid,context);
  if(!row||row.id!==id)fail('练习已更新，请重新打开页面',409);
  const state=JSON.parse(row.state);
+ if(context==='daily'&&state.dailyDay!==dailyWindow().day)fail('今日题组已更新，请重新进入每日50题',409);
  if(state.bankVersion!==bankVersion)fail('题库已更新，请重新打开练习',409);
  return state;
 }
 function write(uid,context,id,state){db.prepare('INSERT INTO theory_sessions(user_id,context,id,state,updated) VALUES(?,?,?,?,?) ON CONFLICT(user_id,context) DO UPDATE SET id=excluded.id,state=excluded.state,updated=excluded.updated').run(uid,context,id,JSON.stringify(state),now())}
-function output(context,id,state){return {context,id,...state,questions:state.ids.map(id=>safeTheory(learningTheoryMap.get(id))),completed:state.ids.filter(id=>state.answers[id]?.result).length,total:state.ids.length}}
-export function practiceSummary(uid){return Object.fromEntries(db.prepare('SELECT context,state FROM theory_sessions WHERE user_id=?').all(uid).map(r=>{const s=JSON.parse(r.state);return [r.context,{completed:s.ids.filter(id=>s.answers[id]?.result).length,total:s.ids.length}]}))}
+function output(context,id,state){return {context,id,...state,serverTime:now(),...(context==='daily'?{resetsAt:state.dailyResetsAt}:{}),questions:state.ids.map(id=>safeTheory(learningTheoryMap.get(id))),completed:state.ids.filter(id=>state.answers[id]?.result).length,total:state.ids.length}}
+export function practiceSummary(uid){return Object.fromEntries(db.prepare('SELECT context,state FROM theory_sessions WHERE user_id=?').all(uid).map(r=>{const s=JSON.parse(r.state);if(r.context==='daily'&&s.dailyDay!==dailyWindow().day)return [r.context,{completed:0,total:50}];return [r.context,{completed:s.ids.filter(id=>s.answers[id]?.result).length,total:s.ids.length}]}))}
 export function openTheoryPractice(uid,data={}){return transaction(()=>{
- const context=data.context||'regular';if(!contexts.has(context))fail('练习类型无效');
+ const calendar=dailyWindow(),context=data.context||'regular';if(!contexts.has(context))fail('练习类型无效');
  const row=getRow(uid,context);let s=row?JSON.parse(row.state):null;
  const previous=!row&&context==='regular'?db.prepare('SELECT question_id FROM progress WHERE user_id=? AND seen>0 ORDER BY updated DESC').all(uid).map(r=>theoryMap.get(r.question_id)).find(Boolean):null;
  const type=data.type??s?.type??previous?.type??'s',search=data.search??s?.search??'';
  if(!['j','s','m'].includes(type)||typeof search!=='string'||search.length>100)fail('筛选条件无效');
- if(data.restart&&context==='daily'&&s&&s.ids.some(id=>!s.answers[id]?.result))fail('请先完成当前50题',409);
- const reset=!s||s.bankVersion!==bankVersion||data.restart||context!=='daily'&&(type!==s.type||search!==s.search||data.startId&&!s.ids.includes(data.startId));
+ const dailyExpired=context==='daily'&&s?.dailyDay!==calendar.day;
+ if(data.restart&&context==='daily'&&s&&!dailyExpired)fail('今日题组已固定，明日0点更新',409);
+ const reset=dailyExpired||!s||s.bankVersion!==bankVersion||data.restart||context!=='daily'&&(type!==s.type||search!==s.search||data.startId&&!s.ids.includes(data.startId));
  let id=row?.id;
  if(reset){
   let ids;
   if(context==='daily'){
    const wrong=new Set(db.prepare('SELECT question_id FROM progress WHERE user_id=? AND wrong=1').all(uid).map(r=>r.question_id));
-   const priority=theory.filter(q=>wrong.has(q.id));const selected=sample(priority,Math.min(50,priority.length));
-   const seen=new Set(selected.map(q=>q.id));ids=sample([...selected,...sample(theory.filter(q=>!seen.has(q.id)),50-selected.length)],50).map(q=>q.id);
+   const selected=Object.entries(DAILY_COUNTS).flatMap(([type,count])=>{
+    const pool=theory.filter(q=>q.type===type),priority=pool.filter(q=>wrong.has(q.id));
+    const chosen=sample(priority,Math.min(count,priority.length)),seen=new Set(chosen.map(q=>q.id));
+    return [...chosen,...sample(pool.filter(q=>!seen.has(q.id)),count-chosen.length)];
+   });
+   ids=sample(selected,50).map(q=>q.id);
   }else{
    let qs=(context==='regular'?theory:[...learningTheoryMap.values()]).filter(q=>q.type===type&&q.question.includes(search));
    if(context!=='regular'){const selected=new Set(db.prepare(`SELECT question_id FROM progress WHERE user_id=? AND ${context==='wrong'?'wrong':'favorite'}=1`).all(uid).map(r=>r.question_id));qs=qs.filter(q=>selected.has(q.id))}
    ids=qs.map(q=>q.id);
   }
   const at=previous&&data.type===undefined&&data.search===undefined?ids.indexOf(previous.id):-1;
-  s={bankVersion,ids,type,search,index:at>=0?Math.min(at+1,ids.length-1):0,answers:{},created:now()};id=randomUUID();
+  s={bankVersion,...(context==='daily'?{dailyDay:calendar.day,dailyResetsAt:calendar.resetsAt}:{}),ids,type,search,index:at>=0?Math.min(at+1,ids.length-1):0,answers:{},created:now()};id=randomUUID();
  }
  if(data.startId){const at=s.ids.indexOf(data.startId);if(at<0)fail('题目不在当前练习中',404);s.index=at}
  write(uid,context,id,s);return output(context,id,s);

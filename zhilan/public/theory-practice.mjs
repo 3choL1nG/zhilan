@@ -1,20 +1,22 @@
 import {state,$,$$,esc,api,dialog,toast,busy} from './api.mjs';
-let generation=0,pending=Promise.resolve(),saveError=null;
-export function disposeTheoryPractice(){generation++;document.body.classList.remove('theory-practice')}
+let generation=0,pending=Promise.resolve(),saveError=null,dayTimer=null,removeDayListener=null;
+export function disposeTheoryPractice(){generation++;clearTimeout(dayTimer);removeDayListener?.();removeDayListener=null;document.body.classList.remove('theory-practice')}
 export async function mountTheoryPractice({context='regular',startId,type,route}){
- const token=++generation;let session;
+ const token=++generation;let session,refreshingDay=false;
  const alive=()=>token===generation;
  const title=()=>context==='daily'?'每日50题':context==='wrong'?'错题重练':context==='favorite'?'收藏练习':'理论练习';
  const error=e=>{if(alive()&&$('#practice-error'))$('#practice-error').textContent=e.message};
- async function load(options={}){await pending;const data=await api('/theory/session','POST',{context,...options});if(!alive())return;session=data;saveError=null;document.body.classList.add('theory-practice');render()}
- function persist(payload){const data={context,id:session.id,...payload};pending=pending.then(()=>api('/theory/session','PATCH',data)).then(()=>{saveError=null;if(alive()&&$('#practice-save'))$('#practice-save').textContent='进度已保存'},e=>{saveError=e;error(e);if(alive()&&$('#practice-save'))$('#practice-save').textContent='保存未完成，请重试'});return pending}
+ async function load(options={}){await pending;const data=await api('/theory/session','POST',{context,...options});if(!alive())return;session=data;saveError=null;document.body.classList.add('theory-practice');render();scheduleDay()}
+ async function refreshDay(){if(!alive()||refreshingDay)return;refreshingDay=true;try{const before=session?.id;await load();if(alive()&&before!==session.id){if($('#dialog').open)$('#dialog').close();toast('每日50题已更新','今天是判断20题、单选20题、多选10题。');focusQuestion()}}catch(e){error(e);if(alive())dayTimer=setTimeout(refreshDay,5000)}finally{refreshingDay=false}}
+ function scheduleDay(){clearTimeout(dayTimer);removeDayListener?.();removeDayListener=null;if(context!=='daily')return;const deadline=Date.now()+Math.max(0,session.resetsAt-session.serverTime),check=()=>{if(document.visibilityState==='visible'&&Date.now()>=deadline)void refreshDay()};document.addEventListener('visibilitychange',check);window.addEventListener('focus',check);removeDayListener=()=>{document.removeEventListener('visibilitychange',check);window.removeEventListener('focus',check)};dayTimer=setTimeout(refreshDay,Math.max(100,deadline-Date.now()+50))}
+ function persist(payload){const data={context,id:session.id,...payload};pending=pending.then(()=>api('/theory/session','PATCH',data)).then(()=>{saveError=null;if(alive()&&$('#practice-save'))$('#practice-save').textContent='进度已保存'},e=>{saveError=e;error(e);if(context==='daily'&&e.status===409)void refreshDay();if(alive()&&$('#practice-save'))$('#practice-save').textContent='保存未完成，请重试'});return pending}
  function focusQuestion(){const h=$('#practice-question');h?.focus({preventScroll:true});h?.scrollIntoView({block:'start',behavior:'instant'})}
- async function change(index){await pending;if(saveError)throw saveError;await persist({index});if(saveError)throw saveError;if(!alive())return;session.index=index;render();focusQuestion()}
+ async function change(index){const workingId=session.id;await pending;if(saveError)throw saveError;await persist({index});if(saveError)throw saveError;if(!alive()||session.id!==workingId)return;session.index=index;render();focusQuestion()}
  function resultHtml(result){return `<div class="feedback" data-kind="${result.correct?'success':'error'}"><b>${result.correct?'回答正确':'回答有误'} · 标准答案 ${esc(result.answer)}</b>${result.explanation?'<p>'+esc(result.explanation)+'</p>':''}${result.correct?'':'<p>已加入错题本。</p>'}</div>`}
  function render(){
   if(!alive())return;
   const all=session.questions,index=session.index,q=all[index],complete=all.length>0&&all.every(q=>session.answers[q.id]?.result);
-  const heading=`<div class="page-head"><div><div class="eyebrow">${title()}</div><h1>${title()}</h1><p>${all.length?`已完成 ${all.filter(q=>session.answers[q.id]?.result).length} / ${all.length} 题 · 进度自动保存，下次继续`:'当前没有待练习的题目'}</p></div><button class="btn" id="practice-home">返回概览</button></div>`;
+  const heading=`<div class="page-head"><div><div class="eyebrow">${title()}</div><h1>${title()}</h1><p>${all.length?`已完成 ${all.filter(q=>session.answers[q.id]?.result).length} / ${all.length} 题 · ${context==='daily'?'每天0点更新 · 判断20 / 单选20 / 多选10':'进度自动保存，下次继续'}`:'当前没有待练习的题目'}</p></div><button class="btn" id="practice-home">返回概览</button></div>`;
   const filter=context==='daily'?'':`<div class="toolbar practice-filters"><label>题型<select class="control" id="practice-type">${[['j','判断题'],['s','单选题'],['m','多选题']].map(([v,t])=>`<option value="${v}" ${session.type===v?'selected':''}>${t}</option>`).join('')}</select></label><label class="search">搜索题干<input class="control" id="practice-search" type="search" value="${esc(session.search)}" placeholder="输入知识点或题干"></label><button class="btn" id="practice-search-go">搜索</button></div>`;
   if(!q){$('#view').innerHTML=heading+filter+'<div class="card empty-state"><h2>没有找到题目</h2><p>可以更换题型或清空搜索条件。</p><button class="btn" id="practice-clear">查看全部题目</button></div>';bindFilters();$('#practice-clear').onclick=busy($('#practice-clear'),()=>load({search:'',type:'s',restart:true}));return}
   const saved=session.answers[q.id],result=saved?.result,selected=saved?.answer,opts=q.type==='j'?{T:'正确',F:'错误'}:q.options;
@@ -31,10 +33,11 @@ export async function mountTheoryPractice({context='regular',startId,type,route}
   $('#practice-form').onsubmit=async e=>{e.preventDefault();const button=e.submitter;button.disabled=true;try{
    if(result){if(complete||next<0)return showComplete();await change(next);return}
    const values=$$('input[name=practice-choice]:checked').map(i=>i.value);if(!values.length)throw Error('请先选择答案');await pending;
-   const answer=q.type==='m'?values:values[0],checked=await api('/theory/submit','POST',{id:q.id,answer,sessionId:session.id,context});
+   const workingId=session.id,answer=q.type==='m'?values:values[0],checked=await api('/theory/submit','POST',{id:q.id,answer,sessionId:workingId,context});
+   if(!alive()||session.id!==workingId)return;
    session.answers[q.id]={answer,result:checked};saveError=null;
    if(alive()){render();$('#practice-primary')?.focus({preventScroll:true})}
-  }catch(e){error(e)}finally{if(button.isConnected)button.disabled=false}};
+  }catch(e){error(e);if(context==='daily'&&e.status===409)void refreshDay()}finally{if(button.isConnected)button.disabled=false}};
  }
  function bindFilters(){
   $('#practice-home').onclick=busy($('#practice-home'),async()=>{await pending;if(saveError)throw saveError;route('overview')});
@@ -45,9 +48,9 @@ export async function mountTheoryPractice({context='regular',startId,type,route}
  }
  function showComplete(){
   const done=session.questions.filter(q=>session.answers[q.id]?.result),correct=done.filter(q=>session.answers[q.id].result.correct).length;
-  dialog(`<h2>${context==='daily'?'每日50题已完成':'本组练习已完成'}</h2><p>已完成 ${done.length} 题，答对 ${correct} 题。错题已保存在错题本中。</p><div class="dialog-actions"><button class="btn" id="practice-complete-home">返回概览</button><button class="btn primary" id="practice-new">${context==='daily'?'开始新一组50题':'重新练习本组'}</button></div>`);
+  dialog(`<h2>${context==='daily'?'每日50题已完成':'本组练习已完成'}</h2><p>已完成 ${done.length} 题，答对 ${correct} 题。错题已保存在错题本中。</p>${context==='daily'?'<p>今天的题组已完成，明日0点更新。</p>':''}<div class="dialog-actions"><button class="btn" id="practice-complete-home">返回概览</button><button class="btn primary" id="practice-new">${context==='daily'?'查看本组作答':'重新练习本组'}</button></div>`);
   $('#practice-complete-home').onclick=()=>{$('#dialog').close();route('overview')};
-  $('#practice-new').onclick=busy($('#practice-new'),async()=>{await load({restart:true});$('#dialog').close();focusQuestion()});
+  $('#practice-new').onclick=busy($('#practice-new'),async()=>{if(context!=='daily')await load({restart:true});$('#dialog').close();focusQuestion()});
  }
  await load(startId?{startId,type}:{});
 }
